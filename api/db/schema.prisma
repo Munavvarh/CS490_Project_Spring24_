@@ -5,8 +5,8 @@
 // https://www.prisma.io/docs/orm/prisma-migrate
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = "mysql://test:1234@localhost:3306/test"
 }
 
 generator client {
