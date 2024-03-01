@@ -1,47 +1,50 @@
+/* Tailwind imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Body style */
+/* Global background color */
 body {
-  @apply font-sans antialiased bg-pink-100 text-gray-900;
+  @apply bg-blue-50; /* This sets the background color for the whole page */
 }
 
-/* Header style */
-.header {
-  @apply bg-pink-100 shadow-md;
+/* Custom styles using Tailwind's @apply directive */
+.home-navbar {
+  @apply bg-blue-600 text-white px-4 py-2;
 }
 
-/* Navigation style */
-.navbar {
-  @apply flex justify-between items-center py-4 px-6 bg-indigo-500 text-white;
+.home-header {
+  @apply pt-6 border-t-4 border-b-4 py-10 text-center text-cyan-950 font-bold mt-20 border-gray-800;
 }
 
-.nav-link {
-  @apply mr-4 text-lg font-semibold;
+.home-header-title {
+  @apply text-5xl font-bold mb-2;
 }
 
-/* Main content style */
-.main-content {
-  @apply container mx-auto my-8 px-4;
+.home-header-subtitle {
+  @apply text-2xl;
 }
 
-/* Section heading style */
-.section-heading {
-  @apply text-3xl font-bold mb-6;
+.home-main {
+  @apply p-12 rounded-lg shadow;
 }
 
-/* Card container style */
-.card-container {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+.home-section {
+  @apply mb-36;
 }
 
-/* Card style */
-.card {
-  @apply bg-white rounded-lg shadow-md p-6;
+.home-section-title {
+  @apply text-3xl font-semibold mb-4;
 }
 
-/* Footer style */
-.footer {
-  @apply text-center py-4 bg-gray-800 text-white;
+.home-section-text {
+  @apply text-xl my-8;
+}
+
+.global-footer {
+  @apply bg-blue-600 py-6 text-center;
+}
+
+.global-footer-text {
+  @apply text-base;
 }
