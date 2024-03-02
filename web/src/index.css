@@ -8,10 +8,6 @@ body {
   @apply bg-blue-50; /* This sets the background color for the whole page */
 }
 
-/* Custom styles using Tailwind's @apply directive */
-.home-navbar {
-  @apply bg-blue-600 text-white px-4 py-2;
-}
 
 .home-header {
   @apply pt-6 border-t-4 border-b-4 py-10 text-center text-cyan-950 font-bold mt-20 border-gray-800;
@@ -42,9 +38,50 @@ body {
 }
 
 .global-footer {
-  @apply bg-blue-600 py-6 text-center;
+  @apply bg-blue-700 py-8 text-center;
 }
 
 .global-footer-text {
-  @apply text-base;
+  @apply text-white text-lg font-bold;
+}
+
+/* Add styles for the logo image */
+
+/* Logo image */
+.logo-image {
+  height: 50px; /* Adjust the height as needed */
+  width: 75px; /* Adjust the width as needed */
+}
+
+/* NavBar Styles */
+.navbar {
+  @apply bg-blue-700 text-white p-6 flex justify-between items-center;
+}
+
+.navbar-nav {
+  @apply list-none flex;
+}
+
+.navbar-item {
+  @apply font-bold mx-4;
+}
+
+.navbar-link {
+  @apply text-lg text-white hover:text-blue-300 py-2 px-4 rounded transition duration-300 ease-in-out;
+}
+
+/* Responsive styles, if needed */
+@media screen and (max-width: 768px) {
+  /* Navbar styles for screens 768px and below */
+  .navbar-nav {
+    @apply flex-col;
+  }
+
+  .navbar-item {
+    @apply mb-2 mx-0;
+  }
+
+  .navbar-link {
+    @apply block text-center;
+  }
 }
