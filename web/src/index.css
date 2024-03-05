@@ -1,47 +1,100 @@
+/* Tailwind imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Body style */
+/* Global background color */
 body {
   @apply font-sans antialiased bg-pink-100 text-gray-900;
   @apply bg-blue-50 text-gray-900;
   padding: 60px; /* Add padding around the edges of the page */
 }
 
-/* Header style */
+
+.home-header {
+  @apply pt-6 border-t-4 border-b-4 py-10 text-center text-cyan-950 font-bold mt-20 border-gray-800;
+}
+
 .header {
   @apply bg-blue-200 shadow-md;
 }
 
-/* Navigation style */
-.navbar {
-  @apply flex justify-between items-center py-4 px-6 bg-indigo-500 text-white;
+.home-header-title {
+  @apply text-5xl font-bold mb-2;
 }
 
-.nav-link {
-  @apply mr-4 text-lg font-semibold;
+.home-header-subtitle {
+  @apply text-2xl;
 }
 
-/* Main content style */
+.home-main {
+  @apply p-12 rounded-lg shadow;
+}
+
 .main-content {
   @apply mx-auto my-8 px-4; /* existing styles */
   @apply m-5; /* Tailwind utility for margin */
 }
 
-/* Section heading style */
-.section-heading {
-  @apply text-3xl font-bold mb-6;
+.home-section {
+  @apply mb-36;
 }
 
-/* Card container style */
-.card-container {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+.home-section-title {
+  @apply text-3xl font-semibold mb-4;
 }
 
-/* Card style */
-.card {
-  @apply bg-white rounded-lg shadow-md p-6;
+.home-section-text {
+  @apply text-xl my-8;
+}
+
+.global-footer {
+  @apply bg-blue-700 py-8 text-center;
+}
+
+.global-footer-text {
+  @apply text-white text-lg font-bold;
+}
+
+/* Add styles for the logo image */
+
+/* Logo image */
+.logo-image {
+  height: 50px; /* Adjust the height as needed */
+  width: 75px; /* Adjust the width as needed */
+}
+
+/* NavBar Styles */
+.navbar {
+  @apply bg-blue-700 text-white p-6 flex justify-between items-center;
+}
+
+.navbar-nav {
+  @apply list-none flex;
+}
+
+.navbar-item {
+  @apply font-bold mx-4;
+}
+
+.navbar-link {
+  @apply text-lg text-white hover:text-blue-300 py-2 px-4 rounded transition duration-300 ease-in-out;
+}
+
+/* Responsive styles, if needed */
+@media screen and (max-width: 768px) {
+  /* Navbar styles for screens 768px and below */
+  .navbar-nav {
+    @apply flex-col;
+  }
+
+  .navbar-item {
+    @apply mb-2 mx-0;
+  }
+
+  .navbar-link {
+    @apply block text-center;
+  }
 }
 
 /* NEW */
@@ -117,3 +170,4 @@ label + .form-input {
   border-color: #8fadff; /* Focus state border color */
   border-width: 3px; /* Focus state border thickness */
 }
+
