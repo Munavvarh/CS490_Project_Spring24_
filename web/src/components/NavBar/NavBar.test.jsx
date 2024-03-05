@@ -39,7 +39,7 @@ describe('NavBar Component', () => {
     const loginLink = screen.getByText(/login\/signup/i);
 
     expect(homeLink.getAttribute('href')).toBe('/home');
-    expect(translatorLink.getAttribute('href')).toBe('/Translator Tool');
+    expect(translatorLink.getAttribute('href')).toBe('/translation-output');
     expect(documentationLink.getAttribute('href')).toBe('/Documentation');
     expect(feedbackLink.getAttribute('href')).toBe('/Feedback');
     expect(loginLink.getAttribute('href')).toBe('/login');

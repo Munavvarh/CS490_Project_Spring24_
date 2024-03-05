@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
 
 const TranslationOutputPage = () => {
   const [inputCode, setInputCode] = useState('');
@@ -29,6 +30,7 @@ const TranslationOutputPage = () => {
   };
 
   return (
+    <MainLayout>
     <div className="bg-white min-h-screen p-10">
       <div className="mb-4">
         <label htmlFor="inputCode" className="code-main-label">Enter your code:</label>
@@ -83,6 +85,7 @@ const TranslationOutputPage = () => {
         <button onClick={downloadFile} className="btn-download">Download</button>
       </div>
     </div>
+    </MainLayout>
   );
 };
 

@@ -7,7 +7,6 @@
 body {
   @apply font-sans antialiased bg-pink-100 text-gray-900;
   @apply bg-blue-50 text-gray-900;
-  padding: 60px; /* Add padding around the edges of the page */
 }
 
 
@@ -33,7 +32,7 @@ body {
 
 .main-content {
   @apply mx-auto my-8 px-4; /* existing styles */
-  @apply m-5; /* Tailwind utility for margin */
+  @apply m-5;  /* Tailwind utility for margin */
 }
 
 .home-section {
@@ -152,9 +151,6 @@ body {
   font-size: 1.00rem; /* Increase the font size to 1.25rem (20px) */
 }
 
-.container {
-  @apply max-w-6xl mx-auto px-4 py-8; /* Added py-8 for vertical padding */
-}
 
 label + .form-textarea,
 label + .form-input {
