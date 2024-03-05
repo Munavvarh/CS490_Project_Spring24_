@@ -6,7 +6,7 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout';
 const HomePage = () => {
   return (
     <MainLayout>
-      <div className="container mx-auto max-w-7xl px-4">
+      <div>
         <header className="home-header">
           <h1 className="home-header-title">SyntaxSwitch</h1>
           <p className="home-header-subtitle">The best code translator tool website</p>
@@ -30,13 +30,11 @@ const HomePage = () => {
                 <li><strong>Paste Your Code</strong>: In the code submission box, paste the code you wish to translate.</li>
                 <li><strong>Translate</strong>: Hit the 'Submit' button and watch as SyntaxSwitch translates your code efficiently.</li>
                 <li><strong>Review and Use</strong>: The translated code will appear in the output box. Review the translation, make any tweaks if necessary, and use it as needed in your projects.</li>
-              </ol>
-              <ul className="list-disc list-inside">
                 <li><strong>API Status</strong>: Check the current status of the GPT-3 API directly from our 'API Status' button to ensure the translation service is online.</li>
                 <li><strong>Documentation</strong>: Access comprehensive guides and tutorials via the 'Documentation' button to help you make the most of the tool.</li>
                 <li><strong>Login/Signup</strong>: For enhanced features and personalized experience, click on 'Sign In' to access your account or create a new one if you haven’t registered yet.</li>
                 <li><strong>Feedback</strong>: Your input is invaluable to us. The 'Feedback' button on the navigation bar is your direct line to our development team. Whether you've encountered a bug, have suggestions for new features, or want to leave general comments, we're all ears. We strive to consider all user suggestions and work diligently to enhance your experience.</li>
-              </ul>
+              </ol>
             </div>
           </section>
         </main>
