@@ -5,12 +5,18 @@
 
 /* Global background color */
 body {
-  @apply bg-blue-50; /* This sets the background color for the whole page */
+  @apply font-sans antialiased bg-pink-100 text-gray-900;
+  @apply bg-blue-50 text-gray-900;
+  padding: 60px; /* Add padding around the edges of the page */
 }
 
 
 .home-header {
   @apply pt-6 border-t-4 border-b-4 py-10 text-center text-cyan-950 font-bold mt-20 border-gray-800;
+}
+
+.header {
+  @apply bg-blue-200 shadow-md;
 }
 
 .home-header-title {
@@ -23,6 +29,11 @@ body {
 
 .home-main {
   @apply p-12 rounded-lg shadow;
+}
+
+.main-content {
+  @apply mx-auto my-8 px-4; /* existing styles */
+  @apply m-5; /* Tailwind utility for margin */
 }
 
 .home-section {
@@ -85,3 +96,78 @@ body {
     @apply block text-center;
   }
 }
+
+/* NEW */
+
+.form-textarea,
+.form-input {
+  @apply block w-full sm:text-sm border-gray-300 rounded-md;
+  @apply p-2;
+}
+
+.input-half-width {
+  @apply w-1/6;
+}
+
+.btn-translate {
+  @apply bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md font-bold uppercase shadow-lg transition ease-in-out duration-300;
+}
+
+.btn-translate,
+.btn-copy,
+.btn-download {
+  @apply px-6 py-2 border rounded-md shadow-sm text-white font-bold uppercase tracking-wider cursor-pointer;
+}
+
+.form-textarea,
+.form-input,
+.btn-translate,
+.btn-copy,
+.btn-download {
+  @apply mb-2; /* Add bottom margin to space out form elements and buttons */
+}
+
+/* Ensure the button is placed under the "Translation Language" field */
+.btn-translate {
+  @apply mt-2;
+}
+
+.btn-copy {
+  @apply bg-gray-300 hover:bg-gray-400 text-gray-700 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300;
+}
+
+.btn-download {
+  @apply bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300;
+}
+
+/* Additional global styles */
+
+.code-main-label {
+  font-weight: bold; /* Make the font bold */
+  font-size: 1.25rem; /* Increase the font size to 1.25rem (20px) */
+}
+
+.code-extra-label {
+  font-weight: bold; /* Make the font bold */
+  font-size: 1.00rem; /* Increase the font size to 1.25rem (20px) */
+}
+
+.container {
+  @apply max-w-6xl mx-auto px-4 py-8; /* Added py-8 for vertical padding */
+}
+
+label + .form-textarea,
+label + .form-input {
+  @apply mt-1; /* Increase margin-top for space below the label */
+}
+
+.form-input, .form-textarea {
+  border: 2px solid #9a9a9a; /* Default state border */
+  outline: none; /* Removes the default outline */
+}
+
+.form-input:focus, .form-textarea:focus {
+  border-color: #8fadff; /* Focus state border color */
+  border-width: 3px; /* Focus state border thickness */
+}
+
