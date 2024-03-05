@@ -22,13 +22,3 @@ model UserExample {
   email String  @unique
   name  String?
 }
-
-model Feedback {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  score      Int
-  email      String?
-  review     String?
-  codeInput  String?
-  codeOutput String?
-}
