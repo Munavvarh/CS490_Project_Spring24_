@@ -16,18 +16,16 @@ import { useAuth } from './auth'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
-      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
-        <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
-        <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
-        <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
-        <Route path="/posts" page={PostPostsPage} name="posts" />
-      </Set>
-      <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
+      <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      {/* <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
         <Route path="/users/new" page={UserNewUserPage} name="newUser" />
         <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
         <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
         <Route path="/users" page={UserUsersPage} name="users" />
-      </Set>
+      </Set> */}
       <Route path="/home" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
