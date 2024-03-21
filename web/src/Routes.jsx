@@ -20,12 +20,6 @@ const Routes = () => {
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      {/* <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
-        <Route path="/users/new" page={UserNewUserPage} name="newUser" />
-        <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
-        <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
-        <Route path="/users" page={UserUsersPage} name="users" />
-      </Set> */}
       <Route path="/home" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
