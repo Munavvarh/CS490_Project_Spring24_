@@ -6,7 +6,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("MYSQL_URL")
+  url      = "mysql://test:1234@localhost:3306/test"
 }
 
 generator client {
@@ -18,14 +18,16 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 // TODO: Please remove the following example:
 model User {
-  id                  Int       @id @default(autoincrement())
+  id                  Int                 @id @default(autoincrement())
   name                String?
-  email               String    @unique
+  email               String              @unique
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
+  translationHistories TranslationHistory[]
 }
+
 
 model Feedback {
   id         Int      @id @default(autoincrement())
@@ -36,3 +38,15 @@ model Feedback {
   codeInput  String?
   codeOutput String?
 }
+
+model TranslationHistory {
+  id            Int      @id @default(autoincrement())
+  userId        Int      // Links to the User model's ID
+  originalCode  String
+  translatedCode String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  status        String   // Could be an enum if you have predefined statuses
+  user          User     @relation(fields: [userId], references: [id])
+}
+
