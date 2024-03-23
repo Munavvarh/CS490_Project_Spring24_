@@ -17,7 +17,7 @@ const NavBar = () => {
           <Link to="/translation-output" className="navbar-link">Translator Tool</Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/Documentation" className="navbar-link ">Documentation</Link>
+          <Link to="/documentation" className="navbar-link ">Documentation</Link>
         </li>
         <li className="navbar-item ">
           <Link to="/Feedback" className="navbar-link ">Feedback</Link>

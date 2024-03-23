@@ -40,7 +40,7 @@ describe('NavBar Component', () => {
 
     expect(homeLink.getAttribute('href')).toBe('/home');
     expect(translatorLink.getAttribute('href')).toBe('/translation-output');
-    expect(documentationLink.getAttribute('href')).toBe('/Documentation');
+    expect(documentationLink.getAttribute('href')).toBe('/documentation');
     expect(feedbackLink.getAttribute('href')).toBe('/Feedback');
     expect(loginLink.getAttribute('href')).toBe('/login');
   });
