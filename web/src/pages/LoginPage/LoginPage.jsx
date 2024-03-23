@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { useEffect } from 'react'
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
 
 import {
   Form,
@@ -46,6 +47,7 @@ const LoginPage = () => {
 
   return (
     <>
+    <MainLayout>
       <Metadata title="Login" />
 
       <main className="rw-main">
@@ -127,7 +129,9 @@ const LoginPage = () => {
           </div>
         </div>
       </main>
+      </MainLayout>
     </>
+   
   )
 }
 
