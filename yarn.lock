@@ -5238,6 +5238,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@redwoodjs/auth@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@redwoodjs/auth@npm:7.0.2"
+  dependencies:
+    "@babel/runtime-corejs3": "npm:7.23.9"
+    core-js: "npm:3.35.1"
+    react: "npm:18.2.0"
+  checksum: 10c0/7ecd1fc9ea3a71cf3d7bc9038a3114f6c2915c6900d1d370e99b42bd94d942dd2b69a6da9e7627471028845e3ad9f0a29a4d5f84ad1015dc990870cebb65f18c
+  languageName: node
+  linkType: hard
+
 "@redwoodjs/auth@npm:7.0.6":
   version: 7.0.6
   resolution: "@redwoodjs/auth@npm:7.0.6"
@@ -5613,6 +5624,18 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
   checksum: 10c0/5c7ad90ab16de90b6a9b525c10bc578708dba62e970f37d7f79b06942e78029e931a2b3d2bdf5371f28a7900a9b36711bf813d919d03fc63d6cf39bfb0caf046
+  languageName: node
+  linkType: hard
+
+"@redwoodjs/project-config@npm:7.0.2":
+  version: 7.0.2
+  resolution: "@redwoodjs/project-config@npm:7.0.2"
+  dependencies:
+    "@iarna/toml": "npm:2.2.5"
+    deepmerge: "npm:4.3.1"
+    fast-glob: "npm:3.3.2"
+    string-env-interpolation: "npm:1.0.1"
+  checksum: 10c0/1f5e460c2154371e2cb78c0aee690394cc04b9ceb6ca49fd038c0b7bb87bafdda906dd9b94d35c70f7f79ddcfb8f4c5f7761f62a1d1ea5ac252dfbf1441179e5
   languageName: node
   linkType: hard
 
@@ -17746,6 +17769,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"md5@npm:2.3.0":
+  version: 2.3.0
+  resolution: "md5@npm:2.3.0"
+  dependencies:
+    charenc: "npm:0.0.2"
+    crypt: "npm:0.0.2"
+    is-buffer: "npm:~1.1.6"
+  checksum: 10c0/14a21d597d92e5b738255fbe7fe379905b8cb97e0a49d44a20b58526a646ec5518c337b817ce0094ca94d3e81a3313879c4c7b510d250c282d53afbbdede9110
+  languageName: node
+  linkType: hard
+
 "mdast-util-definitions@npm:^4.0.0":
   version: 4.0.0
   resolution: "mdast-util-definitions@npm:4.0.0"
@@ -17759,17 +17793,6 @@ __metadata:
   version: 1.1.0
   resolution: "mdast-util-to-string@npm:1.1.0"
   checksum: 10c0/5dad9746ec0839792a8a35f504564e8d2b8c30013652410306c111963d33f1ee7b5477aa64ed77b64e13216363a29395809875ffd80e2031a08614657628a121
-  languageName: node
-  linkType: hard
-
-"md5@npm:2.3.0":
-  version: 2.3.0
-  resolution: "md5@npm:2.3.0"
-  dependencies:
-    charenc: "npm:0.0.2"
-    crypt: "npm:0.0.2"
-    is-buffer: "npm:~1.1.6"
-  checksum: 10c0/14a21d597d92e5b738255fbe7fe379905b8cb97e0a49d44a20b58526a646ec5518c337b817ce0094ca94d3e81a3313879c4c7b510d250c282d53afbbdede9110
   languageName: node
   linkType: hard
 
