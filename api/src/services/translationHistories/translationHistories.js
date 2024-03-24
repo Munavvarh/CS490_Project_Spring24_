@@ -10,11 +10,25 @@ export const translationHistory = ({ id }) => {
   })
 }
 
-export const createTranslationHistory = ({ input }) => {
+export const createTranslationHistory = async ({ input }) => {
+  // Assuming `input` includes `userId`
+  const { userId } = input;
+
+  // Check if user exists
+  const userExists = await db.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!userExists) {
+    throw new Error(`User with ID ${userId} does not exist.`);
+  }
+
+  // If the user exists, proceed to create the translation history
   return db.translationHistory.create({
     data: input,
-  })
-}
+  });
+};
+
 
 export const updateTranslationHistory = ({ id, input }) => {
   return db.translationHistory.update({

@@ -1,33 +1,72 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
+import { useMutation, gql } from '@redwoodjs/web';
+import { useLocation } from '@redwoodjs/router';
+import { Link, routes } from '@redwoodjs/router';
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
 
-import MainLayout from 'src/layouts/MainLayout/MainLayout'
+const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
+  mutation CreateTranslationHistoryMutation($input: CreateTranslationHistoryInput!) {
+    createTranslationHistory(input: $input) {
+      id
+    }
+  }
+`;
 
 const TranslationOutputPage = () => {
-  const [inputCode, setInputCode] = useState('')
-  const [outputCode, setOutputCode] = useState('')
-  const [sourceLang, setSourceLang] = useState('')
-  const [targetLang, setTargetLang] = useState('')
+  const location = useLocation();
+  const [inputCode, setInputCode] = useState('');
+  const [outputCode, setOutputCode] = useState('');
+  const [sourceLang, setSourceLang] = useState('');
+  const [targetLang, setTargetLang] = useState('');
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const originalCode = queryParams.get('originalCode');
+    if (originalCode) {
+      setInputCode(decodeURIComponent(originalCode));
+    }
+  }, [location]);
+
+  const [createTranslationHistory] = useMutation(CREATE_TRANSLATION_HISTORY_MUTATION);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(outputCode)
-    alert('Copied to clipboard!')
-  }
+    navigator.clipboard.writeText(outputCode);
+    alert('Copied to clipboard!');
+  };
 
-  // Function to download the output code as a file
   const downloadFile = () => {
-    const element = document.createElement('a')
-    const file = new Blob([outputCode], { type: 'text/plain' })
-    element.href = URL.createObjectURL(file)
-    element.download = 'TranslatedCode.txt'
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element) // Clean up
-  }
+    const element = document.createElement('a');
+    const file = new Blob([outputCode], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'TranslatedCode.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element); // Clean up
+  };
 
-  const handleTranslateClick = () => {
-    // Dummy translation for example purposes
-    setOutputCode(`${inputCode}`)
-  }
+  const handleTranslateClick = async () => {
+    const translatedCode = inputCode; // Placeholder for actual translation logic
+    setOutputCode(translatedCode);
+
+    try {
+      await createTranslationHistory({
+        variables: {
+          input: {
+            userId: 1, // Replace with logic to retrieve the current user's ID
+            originalCode: inputCode,
+            translatedCode,
+            originalLanguage: sourceLang,
+            translationLanguage: targetLang,
+            status: 'COMPLETED',
+          },
+        },
+      });
+      alert('Translation saved successfully!');
+    } catch (error) {
+      console.error('Error saving translation:', error);
+      alert('Failed to save translation.');
+    }
+  };
 
   return (
     <MainLayout>
@@ -48,7 +87,7 @@ const TranslationOutputPage = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="sourceLang" className="code-extra-label ">
+          <label htmlFor="sourceLang" className="code-extra-label">
             Language of your code:
           </label>
           <input
@@ -100,6 +139,11 @@ const TranslationOutputPage = () => {
           <button onClick={downloadFile} className="btn-download">
             Download
           </button>
+          <Link to={routes.translationHistory()}>
+            <button className="btn-history btn-history-bold">
+              TRANSLATION HISTORY
+            </button>
+          </Link>
         </div>
       </div>
     </MainLayout>
