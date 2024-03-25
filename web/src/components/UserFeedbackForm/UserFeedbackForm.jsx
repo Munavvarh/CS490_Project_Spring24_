@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { gql } from 'graphql-tag' // Import gql from graphql-tag
 
@@ -14,87 +14,100 @@ import { useMutation } from '@redwoodjs/web'
 import { GraphQLHooksProvider } from '@redwoodjs/web' // Import GraphQLHooksProvider
 import { toast } from '@redwoodjs/web/toast'
 
+import { useAuth } from 'src/auth'
+
 const CREATE = gql`
-  mutation CreateFeedbackMutation($input: CreateFeedbackInput!) {
-    createFeedback(input: $input) {
+  mutation CreateFeedbackMutation(
+    $score: Int!
+    $translationId: Int!
+    $review: String
+    $userId: Int!
+  ) {
+    createFeedback(
+      input: {
+        score: $score
+        translationId: $translationId
+        review: $review
+        userId: $userId
+      }
+    ) {
       id
       createdAt
       score
-      email
+      translationId
       review
-      codeInput
-      codeOutput
+      userId
     }
   }
 `
 
-const UserFeedbackForm = () => {
-  const [hasPosted, setHasPosted] = useState(false)
+export const UserFeedbackForm = ({
+  translationId,
+  showFeedback,
+  onFeedbackSubmit,
+}) => {
+  const { currentUser } = useAuth()
+  const [hasPosted, setHasPosted] = useState(showFeedback)
   const [createFeedback, { loading, error }] = useMutation(CREATE, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       setHasPosted(true)
       toast.success('Thank you for your feedback!')
     },
   })
 
   const onSubmit = (input) => {
-    createFeedback({ variables: { input } })
+    createFeedback({
+      variables: {
+        score: input.score,
+        translationId: translationId,
+        review: input.review,
+        userId: currentUser.id,
+      },
+    })
+    onFeedbackSubmit()
   }
+
+  useEffect(() => {
+    // Update hasPosted when showFeedback changes
+    setHasPosted(showFeedback)
+  }, [showFeedback])
 
   return (
     <GraphQLHooksProvider>
       {' '}
       {/* Wrap your component tree with GraphQLHooksProvider */}
-      <div className={hasPosted ? 'hidden' : ''}>
-        <Form className="max-w-7xl mt-4" onSubmit={onSubmit}>
+      <div className={hasPosted ? 'hidden' : 'mt-4'}>
+        <div className="code-main-label">
+          Your feedback is very important to us! Please rate your translation
+          1-5 and give any feedback you may have.
+        </div>
+        <Form className="max-w-7xl" onSubmit={onSubmit}>
           <FormError
             error={error}
             titleClassName="font-semibold"
             wrapperClassName="bg-red-100 text-red-900 text-sm p-3 rounded"
           />
-          <Label name="score" className="mt-4 block text-xl">
-            Rate 1-5: *
-          </Label>
-          <TextField
-            name="score"
-            className="border rounded text-m block w-12 p-1 "
-            type="number"
-            min={1}
-            max={5}
-            validation={{ required: true }}
-          />
 
-          <Label name="email" className="mt-4 block text-xl">
-            Email: *
-          </Label>
-          <TextField
-            name="email"
-            className="border rounded w-44 text-m block p-1 "
-            pattern=".+@.+\..+"
-            title="Please enter a valid email address"
-            validation={{ required: true }}
-          />
-          <Label name="review" className="mt-4 block text-xl">
-            Feedback Description: *
+          <div className="display: flex-direction: row flex">
+            <Label name="score" className="mr-2 text-lg">
+              Rate 1-5: *
+            </Label>
+            <TextField
+              name="score"
+              className="border rounded text-m block w-12 p-1 "
+              type="number"
+              min={1}
+              max={5}
+              validation={{ required: true }}
+            />
+          </div>
+
+          <Label name="review" className="text-lg">
+            Feedback Description:
           </Label>
           <TextAreaField
             name="review"
             className="border rounded text-m block h-24 w-full p-1"
-            validation={{ required: true }}
-          />
-          <Label name="codeInput" className="mt-4 block text-xl">
-            Code Input:
-          </Label>
-          <TextAreaField
-            name="codeInput"
-            className="border rounded text-m block h-20 w-full p-1"
-          />
-          <Label name="codeOutput" className="mt-4 block text-xl">
-            Code Output:
-          </Label>
-          <TextAreaField
-            name="codeOutput"
-            className="border rounded text-m block h-20 w-full p-1"
           />
           <Submit
             disabled={loading}

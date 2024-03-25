@@ -20,9 +20,15 @@ export const Primary = () => {
         review:
           'My code translated literally perfectly I am in love with this website <3',
         createdAt: '2002-06-11T12:34:56Z',
-        email: 'pjd37@njit.edu',
-        codeInput: 'hi',
-        codeOutput: 'lol',
+        User: {
+          email: 'user1@example.com',
+          hashedPassword: 'randomHashedPassword1',
+          salt: 'randomSalt1',
+        },
+        translation: {
+          originalCode: 'console.log("hello world");',
+          translatedCode: 'print("hello world")',
+        },
       }}
     />
   )

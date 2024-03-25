@@ -2,41 +2,60 @@ export const standard = defineScenario({
   feedback: {
     one: {
       data: {
-        id: 1,
-        score: 5,
-        review:
-          'My code translated literally perfectly I am in love with this website <3',
-        createdAt: '2002-06-11T12:34:56Z',
-        email: 'pjd37@njit.edu',
-        codeInput: 'hi',
-        codeOutput: 'lol',
+        score: 5512556,
+        translation: {
+          create: {
+            originalCode: 'String',
+            translatedCode: 'String',
+            updatedAt: '2024-03-25T01:57:27.282Z',
+            status: 'String',
+            originalLanguage: 'String',
+            translationLanguage: 'String',
+            user: {
+              create: {
+                email: 'String9992930',
+                hashedPassword: 'String',
+                salt: 'String',
+              },
+            },
+          },
+        },
+        User: {
+          create: {
+            email: 'String566800',
+            hashedPassword: 'String',
+            salt: 'String',
+          },
+        },
       },
     },
     two: {
       data: {
-        id: 2,
-        score: 4,
-        review: 'Works good.  I did Python to Java.',
-        createdAt: '2002-06-11T12:34:56Z',
-        email: 'dzwill@mit.edu',
-        codeInput: 'print("Hello world")',
-        codeOutput: 'System.out.println("Hello world")',
-      },
-    },
-  },
-})
-
-export const postOnly = defineScenario({
-  post: {
-    feedback1: {
-      data: {
-        id: 16,
-        score: 1,
-        review: 'This thing stinks.',
-        createdAt: '2009-12-25T21:55:31Z',
-        email: 'hater@hater.org',
-        codeInput: 'print("Stupid!")',
-        codeOutput: 'System.out.println("Bad!")',
+        score: 3501124,
+        translation: {
+          create: {
+            originalCode: 'String',
+            translatedCode: 'String',
+            updatedAt: '2024-03-25T01:57:27.282Z',
+            status: 'String',
+            originalLanguage: 'String',
+            translationLanguage: 'String',
+            user: {
+              create: {
+                email: 'String8695712',
+                hashedPassword: 'String',
+                salt: 'String',
+              },
+            },
+          },
+        },
+        User: {
+          create: {
+            email: 'String1909248',
+            hashedPassword: 'String',
+            salt: 'String',
+          },
+        },
       },
     },
   },

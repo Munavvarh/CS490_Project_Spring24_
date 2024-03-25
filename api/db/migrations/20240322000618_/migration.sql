@@ -6,10 +6,10 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `post` DROP FOREIGN KEY `Post_authorId_fkey`;
+-- ALTER TABLE `post` DROP FOREIGN KEY `Post_authorId_fkey`;
 
 -- DropTable
-DROP TABLE `post`;
+-- DROP TABLE `post`;
 
 -- DropTable
-DROP TABLE `userexample`;
+-- DROP TABLE `userexample`;

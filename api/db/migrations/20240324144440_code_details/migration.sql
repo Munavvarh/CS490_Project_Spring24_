@@ -6,6 +6,6 @@
 
 */
 -- AlterTable
-ALTER TABLE `translationhistory`
+ALTER TABLE `TranslationHistory`
 ADD COLUMN `originalLanguage` VARCHAR(191) NOT NULL DEFAULT 'Unknown',
 ADD COLUMN `translationLanguage` VARCHAR(191) NOT NULL DEFAULT 'Unknown';

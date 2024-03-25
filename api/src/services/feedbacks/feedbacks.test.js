@@ -1,34 +1,81 @@
-import { feedbacks, createFeedback } from './feedbacks'
+import { db } from 'src/lib/db'
 
-// Generated boilerplate tests do not account for all circumstances
-// and can fail without adjustments, e.g. Float.
-//           Please refer to the RedwoodJS Testing Docs:
-//       https://redwoodjs.com/docs/testing#testing-services
-// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+import {
+  feedbacks,
+  feedback,
+  createFeedback,
+  updateFeedback,
+  deleteFeedback,
+} from './feedbacks'
+import { standard } from './feedbacks.scenarios'
+
+jest.mock('src/lib/db', () => ({
+  db: {
+    feedback: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+  },
+}))
 
 describe('feedbacks', () => {
-  scenario('returns all feedbacks', async (scenario) => {
+  it('returns all feedbacks', async () => {
+    db.feedback.findMany.mockResolvedValue([
+      { id: 1, score: 5 },
+      { id: 2, score: 4 },
+    ])
     const result = await feedbacks()
-
-    expect(result.length).toEqual(Object.keys(scenario.feedback).length)
+    expect(result).toEqual([
+      { id: 1, score: 5 },
+      { id: 2, score: 4 },
+    ])
   })
 })
 
-scenario('creates a new comment', async (scenario) => {
-  const feedback = await createFeedback({
-    input: {
-      id: 16,
-      score: 1,
-      review: 'This thing stinks.',
-      createdAt: '2009-12-25T21:55:31Z',
-      email: 'hater@hater.org',
-      codeInput: 'print("Stupid!")',
-      codeOutput: 'System.out.println("Bad!")',
-    },
+describe('feedback', () => {
+  it('returns a specific feedback by id', async () => {
+    db.feedback.findUnique.mockResolvedValue({ id: 1, score: 5 })
+    const result = await feedback({ id: 1 })
+    expect(result).toEqual({ id: 1, score: 5 })
   })
+})
 
-  expect(feedback.email).toEqual('hater@hater.org')
-  expect(feedback.review).toEqual('This thing stinks.')
-  expect(feedback.score).toEqual(1)
-  expect(feedback.createdAt).not.toEqual(null)
+describe('createFeedback', () => {
+  it('creates a new feedback', async () => {
+    const input = { score: 5 }
+    db.feedback.create.mockResolvedValue({ id: 1, ...input })
+    const result = await createFeedback({ input })
+    expect(result).toEqual({ id: 1, ...input })
+  })
+})
+
+describe('updateFeedback', () => {
+  it('updates an existing feedback', async () => {
+    const input = { score: 4 }
+    db.feedback.update.mockResolvedValue({ id: 1, ...input })
+    const result = await updateFeedback({ id: 1, input })
+    expect(result).toEqual({ id: 1, ...input })
+  })
+})
+
+describe('deleteFeedback', () => {
+  it('deletes an existing feedback', async () => {
+    db.feedback.delete.mockResolvedValue({ id: 1 })
+    const result = await deleteFeedback({ id: 1 })
+    expect(result).toEqual({ id: 1 })
+  })
+})
+
+describe('standard scenario', () => {
+  it('runs the standard scenario', async () => {
+    await createFeedback(standard.feedback.one.data)
+    await createFeedback(standard.feedback.two.data)
+
+    const feedbacks = await db.feedback.findMany()
+
+    expect(feedbacks.length).toEqual(2)
+  })
 })

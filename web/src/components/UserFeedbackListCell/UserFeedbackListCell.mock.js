@@ -6,18 +6,40 @@ export const standard = () => ({
       review:
         'My code translated literally perfectly I am in love with this website <3',
       createdAt: '2002-06-11T12:34:56Z',
-      email: 'pjd37@njit.edu',
-      codeInput: 'hi',
-      codeOutput: 'lol',
+      User: {
+        email: 'user1@example.com',
+      },
+      translation: {
+        originalCode: 'console.log("hello world");',
+        translatedCode: 'print("hello world")',
+      },
     },
     {
       id: 2,
       score: 4,
-      review: 'Works good.  I did Python to Java.',
+      review: ':O >:( :3c',
       createdAt: '2002-06-11T12:34:56Z',
-      email: 'dzwill@mit.edu',
-      codeInput: 'print("Hello world")',
-      codeOutput: 'System.out.println("Hello world")',
+      User: {
+        email: 'user1@example.com',
+      },
+      translation: {
+        originalCode: 'console.log("hello world");',
+        translatedCode: 'print("hello world")',
+      },
+    },
+    {
+      id: 3,
+      score: 3,
+      review:
+        'My code translated literally perfectly I am in love with this website <3',
+      createdAt: '2002-06-11T12:34:56Z',
+      User: {
+        email: 'user1@example.com',
+      },
+      translation: {
+        originalCode: 'console.log("hello world");',
+        translatedCode: 'print("hello world")',
+      },
     },
   ],
 })
