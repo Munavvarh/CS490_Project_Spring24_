@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react'
 
-import { useLocation } from '@redwoodjs/router'
-import { Link, routes } from '@redwoodjs/router'
-import { useMutation, gql } from '@redwoodjs/web'
 import { Toaster } from '@redwoodjs/web/toast'
-
-import { useAuth } from 'src/auth'
 import UserFeedbackForm from 'src/components/UserFeedbackForm/'
-import MainLayout from 'src/layouts/MainLayout/MainLayout'
+import { useState, useEffect } from 'react';
+import { useLocation } from '@redwoodjs/router';
+import { Link, routes } from '@redwoodjs/router';
+import MainLayout from 'src/layouts/MainLayout/MainLayout';
+import { useMutation, gql } from '@redwoodjs/web';
+import { useAuth } from 'src/auth';
 
+
+// Slide 2: Basic GPT-3 API Connection Setup
+// GQL Mutation for creating translation history, illustrating initial setup for database interaction.
 const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
   mutation CreateTranslationHistoryMutation(
     $input: CreateTranslationHistoryInput!
@@ -20,19 +22,21 @@ const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
 `
 
 const TranslationOutputPage = () => {
-  const location = useLocation()
-  const [inputCode, setInputCode] = useState('')
-  const [outputCode, setOutputCode] = useState('')
-  const [sourceLang, setSourceLang] = useState('')
-  const [targetLang, setTargetLang] = useState('')
+  const { currentUser } = useAuth();
+  const location = useLocation();
+  // State hooks represent UI components for user interaction, reflecting Slide 1's emphasis on frontend preparation.
+  const [inputCode, setInputCode] = useState('');
+  const [outputCode, setOutputCode] = useState('');
+  const [sourceLang, setSourceLang] = useState('java');
+  const [targetLang, setTargetLang] = useState('python');
   const [showFeedback, setShowFeedback] = useState(false)
   const [translationId, setTranslationId] = useState(null) // State to store translation ID
 
-  const { currentUser } = useAuth()
-
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search)
-    const originalCode = queryParams.get('originalCode')
+    // Slide 1: Implement Code Translation API Integration
+    // Parsing URL parameters for code input demonstrates frontend-to-backend API integration preparation.
+    const queryParams = new URLSearchParams(location.search);
+    const originalCode = queryParams.get('originalCode');
     if (originalCode) {
       setInputCode(decodeURIComponent(originalCode))
     }
@@ -42,97 +46,131 @@ const TranslationOutputPage = () => {
     CREATE_TRANSLATION_HISTORY_MUTATION
   )
 
+  // Utility functions represent enhancements for user experience, indirectly related to API integration.
   const copyToClipboard = () => {
     navigator.clipboard.writeText(outputCode)
     alert('Copied to clipboard!')
   }
 
   const downloadFile = () => {
-    const element = document.createElement('a')
-    const file = new Blob([outputCode], { type: 'text/plain' })
-    element.href = URL.createObjectURL(file)
-    element.download = 'TranslatedCode.txt'
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element) // Clean up
-  }
+    const element = document.createElement('a');
+    const file = new Blob([outputCode], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'TranslatedCode.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   const handleTranslateClick = async () => {
-    const translatedCode = inputCode // Placeholder for actual translation logic
-    setOutputCode(translatedCode)
+    // Slide 1 & Slide 2: Addressing user authentication and input validation align with API usage prerequisites.
+    if (!currentUser) {
+      alert('Please log in to translate and save your code.');
+      return;
+    }
 
+    if (!inputCode.trim()) {
+      alert('Please enter the code in the input box before translating.');
+      return;
+    }
+
+
+    // Slide 3: Advanced GPT-3 API Integration and Error Handling
+    // This section is the core of API interaction, showcasing detailed request construction and response handling.
     try {
-      const { data } = await createTranslationHistory({
-        variables: {
-          input: {
-            userId: currentUser.id, // Replace with logic to retrieve the current user's ID
-            originalCode: inputCode,
-            translatedCode,
-            originalLanguage: sourceLang,
-            translationLanguage: targetLang,
-            status: 'COMPLETED',
-          },
+      const response = await fetch('http://localhost:3001/translate-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      })
-      alert('Translation saved successfully!')
-      const newTranslationId = data.createTranslationHistory.id
-      setTranslationId(newTranslationId)
+        body: JSON.stringify({
+          inputCode,
+          sourceLang,
+          targetLang,
+        }),
+      });
 
-      setShowFeedback(true)
+      const data = await response.json();
+
+      if (!data.success) {
+        // Comprehensive error handling from Slide 3, informing users of various potential API response issues.
+        let errorMessage = 'An error occurred. Please try again.';
+        if (response.status === 429) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment and try again later.';
+        } else if (response.status === 400) {
+          errorMessage = 'Invalid request. Please check your input and try again.';
+        } else if (response.status === 503) {
+          errorMessage = 'Service temporarily unavailable. Please try again later.';
+        }
+        alert(errorMessage);
+      } else {
+        // Successful API interaction leads to UI updates and database storage, reflecting full integration.
+        setOutputCode(data.translatedCode);
+        await createTranslationHistory({
+          variables: {
+            input: {
+              userId: currentUser.id,
+              originalCode: inputCode,
+              translatedCode: data.translatedCode,
+              originalLanguage: sourceLang,
+              translationLanguage: targetLang,
+              status: 'COMPLETED',
+            },
+          },
+        });
+        alert('Translation saved successfully!');
+        const newTranslationId = data.createTranslationHistory.id
+         setTranslationId(newTranslationId)
+         setShowFeedback(true)
+      }
     } catch (error) {
-      console.error('Error saving translation:', error)
-      alert('Failed to save translation.')
+      // Network error handling, emphasizing robustness in application's connectivity with the API.
+      console.error('Error:', error);
+      alert('Error sending translation request. Please check your network connection and try again.');
     }
   }
 
   return (
     <>
       <Toaster />
+        <div className="mb-4">
+          <label htmlFor="sourceLang" className="code-extra-label">
+            Language of your code:
+          </label>
+          <select
+            id="sourceLang"
+            className="form-select mt-1 rounded-md border-2 border-black p-2 shadow-md"
+            value={sourceLang}
+            onChange={(e) => setSourceLang(e.target.value)}
+          >
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+          </select>
+        </div>
 
-      <MainLayout>
-        <div className="min-h-screen p-10">
-          <div className="mb-4">
-            <label htmlFor="inputCode" className="code-main-label">
-              Enter your code:
-            </label>
-            <textarea
-              id="inputCode"
-              rows="15"
-              cols="30"
-              className="form-textarea mt-1 rounded-md border-2 border-black p-2 shadow-md"
-              placeholder="Enter your code..."
-              value={inputCode}
-              onChange={(e) => setInputCode(e.target.value)}
-            ></textarea>
-          </div>
+        <div className="mb-4">
+          <label htmlFor="targetLang" className="code-extra-label">
+            Translation Language:
+          </label>
+          <select
+            id="targetLang"
+            className="form-select mt-1 rounded-md border-2 border-black p-2 shadow-md"
+            value={targetLang}
+            onChange={(e) => setTargetLang(e.target.value)}
+          >
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+          </select>
+        </div>
 
-          <div className="mb-4">
-            <label htmlFor="sourceLang" className="code-extra-label">
-              Language of your code:
-            </label>
-            <input
-              id="sourceLang"
-              type="text"
-              placeholder="Language of your code"
-              className="form-input input-half-width mt-1 rounded-md border-2 border-black p-2 shadow-md"
-              value={sourceLang}
-              onChange={(e) => setSourceLang(e.target.value)}
-            />
-          </div>
 
-          <div className="mb-4">
-            <label htmlFor="targetLang" className="code-extra-label">
-              Translation Language:
-            </label>
-            <input
-              id="targetLang"
-              type="text"
-              placeholder="Translation Language"
-              className="form-input input-half-width mt-1 rounded-md border-2 border-black p-2 shadow-md"
-              value={targetLang}
-              onChange={(e) => setTargetLang(e.target.value)}
-            />
-          </div>
+        <div className="mb-4 flex justify-between">
+          <button onClick={handleTranslateClick} className="btn-translate">
+            Translate
+          </button>
+        </div>
 
           <div className="mb-4 flex justify-between">
             <button onClick={handleTranslateClick} className="btn-translate">

@@ -1,5 +1,4 @@
-import { db } from 'src/lib/db'
-
+// Import necessary functions and db from your service file
 import {
   translationHistories,
   translationHistory,
@@ -7,6 +6,7 @@ import {
   updateTranslationHistory,
   deleteTranslationHistory,
 } from './translationHistories'
+import { db } from 'src/lib/db'
 
 describe('translationHistories', () => {
   // Define a variable to hold our scenario data
@@ -15,11 +15,7 @@ describe('translationHistories', () => {
   // A function to create a test scenario
   async function createTestScenario() {
     const user = await db.user.create({
-      data: {
-        email: 'test@example.com',
-        hashedPassword: 's0m3p4ssw0rd',
-        salt: 's0m3s4lt',
-      },
+      data: { email: 'test@example.com', hashedPassword: 's0m3p4ssw0rd', salt: 's0m3s4lt' },
     })
     const translationHistory = await db.translationHistory.create({
       data: {
@@ -27,8 +23,8 @@ describe('translationHistories', () => {
         originalCode: 'console.log("hello world")',
         translatedCode: 'print("hello world")',
         status: 'COMPLETED',
-        originalLanguage: 'javascript',
-        translationLanguage: 'python',
+        originalLanguage: 'JavaScript',
+        translationLanguage: 'Python',
       },
     })
     return { user, translationHistory }
@@ -51,42 +47,35 @@ describe('translationHistories', () => {
   })
 
   it('returns a single translationHistory', async () => {
-    const result = await translationHistory({
-      id: scenarioData.translationHistory.id,
-    })
-    expect(result).toEqual(
-      expect.objectContaining({ id: scenarioData.translationHistory.id })
-    )
+    const result = await translationHistory({ id: scenarioData.translationHistory.id })
+    expect(result).toEqual(expect.objectContaining({ id: scenarioData.translationHistory.id }))
   })
 
   it('creates a translationHistory', async () => {
-    const newTranslationHistory = {
+    const newTranslationHistoryInput = {
       userId: scenarioData.user.id,
-      originalCode: 'String',
-      translatedCode: 'String',
-      status: 'String',
-      originalLanguage: 'String',
-      translationLanguage: 'String',
+      originalCode: 'console.log("hello new world")',
+      translatedCode: 'print("hello new world")',
+      status: 'COMPLETED',
+      originalLanguage: 'JavaScript',
+      translationLanguage: 'Python',
     }
-    const result = await createTranslationHistory({
-      input: newTranslationHistory,
-    })
-    expect(result).toEqual(expect.objectContaining(newTranslationHistory))
+    const result = await createTranslationHistory({ input: newTranslationHistoryInput })
+    expect(result).toEqual(expect.objectContaining(newTranslationHistoryInput))
   })
 
   it('updates a translationHistory', async () => {
+    const updatedData = { originalCode: 'console.log("updated world")' };
     const result = await updateTranslationHistory({
       id: scenarioData.translationHistory.id,
-      input: { originalCode: 'String2' },
+      input: updatedData,
     })
-    expect(result.originalCode).toEqual('String2')
+    expect(result.originalCode).toEqual(updatedData.originalCode)
   })
 
   it('deletes a translationHistory', async () => {
     await deleteTranslationHistory({ id: scenarioData.translationHistory.id })
-    const result = await translationHistory({
-      id: scenarioData.translationHistory.id,
-    })
+    const result = await translationHistory({ id: scenarioData.translationHistory.id })
     expect(result).toBeNull()
   })
 })
