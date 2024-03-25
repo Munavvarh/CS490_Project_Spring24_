@@ -1,3 +1,6 @@
+
+import { Toaster } from '@redwoodjs/web/toast'
+import UserFeedbackForm from 'src/components/UserFeedbackForm/'
 import { useState, useEffect } from 'react';
 import { useLocation } from '@redwoodjs/router';
 import { Link, routes } from '@redwoodjs/router';
@@ -5,15 +8,18 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout';
 import { useMutation, gql } from '@redwoodjs/web';
 import { useAuth } from 'src/auth';
 
+
 // Slide 2: Basic GPT-3 API Connection Setup
 // GQL Mutation for creating translation history, illustrating initial setup for database interaction.
 const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
-  mutation CreateTranslationHistoryMutation($input: CreateTranslationHistoryInput!) {
+  mutation CreateTranslationHistoryMutation(
+    $input: CreateTranslationHistoryInput!
+  ) {
     createTranslationHistory(input: $input) {
       id
     }
   }
-`;
+`
 
 const TranslationOutputPage = () => {
   const { currentUser } = useAuth();
@@ -23,6 +29,8 @@ const TranslationOutputPage = () => {
   const [outputCode, setOutputCode] = useState('');
   const [sourceLang, setSourceLang] = useState('java');
   const [targetLang, setTargetLang] = useState('python');
+  const [showFeedback, setShowFeedback] = useState(false)
+  const [translationId, setTranslationId] = useState(null) // State to store translation ID
 
   useEffect(() => {
     // Slide 1: Implement Code Translation API Integration
@@ -30,17 +38,19 @@ const TranslationOutputPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const originalCode = queryParams.get('originalCode');
     if (originalCode) {
-      setInputCode(decodeURIComponent(originalCode));
+      setInputCode(decodeURIComponent(originalCode))
     }
-  }, [location]);
+  }, [location])
 
-  const [createTranslationHistory] = useMutation(CREATE_TRANSLATION_HISTORY_MUTATION);
+  const [createTranslationHistory] = useMutation(
+    CREATE_TRANSLATION_HISTORY_MUTATION
+  )
 
   // Utility functions represent enhancements for user experience, indirectly related to API integration.
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(outputCode);
-    alert('Copied to clipboard!');
-  };
+    navigator.clipboard.writeText(outputCode)
+    alert('Copied to clipboard!')
+  }
 
   const downloadFile = () => {
     const element = document.createElement('a');
@@ -63,6 +73,7 @@ const TranslationOutputPage = () => {
       alert('Please enter the code in the input box before translating.');
       return;
     }
+
 
     // Slide 3: Advanced GPT-3 API Integration and Error Handling
     // This section is the core of API interaction, showcasing detailed request construction and response handling.
@@ -108,32 +119,20 @@ const TranslationOutputPage = () => {
           },
         });
         alert('Translation saved successfully!');
+        const newTranslationId = data.createTranslationHistory.id
+         setTranslationId(newTranslationId)
+         setShowFeedback(true)
       }
     } catch (error) {
       // Network error handling, emphasizing robustness in application's connectivity with the API.
       console.error('Error:', error);
       alert('Error sending translation request. Please check your network connection and try again.');
     }
-  };
+  }
 
   return (
-    <MainLayout>
-      <div className="min-h-screen p-10">
-        <div className="mb-4">
-          <label htmlFor="inputCode" className="code-main-label">
-            Enter your code:
-          </label>
-          <textarea
-            id="inputCode"
-            rows="15"
-            cols="30"
-            className="form-textarea mt-1 rounded-md border-2 border-black p-2 shadow-md"
-            placeholder="Enter your code..."
-            value={inputCode}
-            onChange={(e) => setInputCode(e.target.value)}
-          ></textarea>
-        </div>
-
+    <>
+      <Toaster />
         <div className="mb-4">
           <label htmlFor="sourceLang" className="code-extra-label">
             Language of your code:
@@ -173,33 +172,47 @@ const TranslationOutputPage = () => {
           </button>
         </div>
 
-        <div>
-          <label htmlFor="outputCode" className="code-main-label">
-            Translated Code:
-          </label>
-          <textarea
-            id="outputCode"
-            rows="15"
-            cols="30"
-            className="form-textarea mt-1 rounded-md border-2 border-black p-2 shadow-lg"
-            placeholder="Translated code will appear here..."
-            value={outputCode}
-            disabled
-          ></textarea>
-          <button onClick={copyToClipboard} className="btn-copy mr-2">
-            Copy
-          </button>
-          <button onClick={downloadFile} className="btn-download">
-            Download
-          </button>
-          <Link to={routes.translationHistory()}>
-            <button className="btn-history btn-history-bold">
-              TRANSLATION HISTORY
+          <div className="mb-4 flex justify-between">
+            <button onClick={handleTranslateClick} className="btn-translate">
+              Translate
             </button>
-          </Link>
+          </div>
+
+          <div>
+            <label htmlFor="outputCode" className="code-main-label">
+              Translated Code:
+            </label>
+            <textarea
+              id="outputCode"
+              rows="15"
+              cols="30"
+              className="form-textarea mt-1 rounded-md border-2 border-black p-2 shadow-lg"
+              placeholder="Translated code will appear here..."
+              value={outputCode}
+              disabled
+            ></textarea>
+            <button onClick={copyToClipboard} className="btn-copy mr-2">
+              Copy
+            </button>
+            <button onClick={downloadFile} className="btn-download">
+              Download
+            </button>
+            <Link to={routes.translationHistory()}>
+              <button className="btn-history btn-history-bold">
+                TRANSLATION HISTORY
+              </button>
+            </Link>
+          </div>
+          <div>
+            <UserFeedbackForm
+              translationId={translationId}
+              showFeedback={!showFeedback}
+              onFeedbackSubmit={() => setShowFeedback(false)}
+            />
+          </div>
         </div>
-      </div>
-    </MainLayout>
+      </MainLayout>
+    </>
   )
 }
 

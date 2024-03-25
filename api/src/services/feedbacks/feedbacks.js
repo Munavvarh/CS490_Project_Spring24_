@@ -10,21 +10,16 @@ export const feedback = ({ id }) => {
   })
 }
 
-export const feedbackByScore = ({ score }) => {
-  return db.feedback.findMany({
-    where: { score },
-  })
-}
-
-export const feedbackByEmail = ({ email }) => {
-  return db.feedback.findMany({
-    where: { email },
-  })
-}
-
 export const createFeedback = ({ input }) => {
   return db.feedback.create({
     data: input,
+  })
+}
+
+export const updateFeedback = ({ id, input }) => {
+  return db.feedback.update({
+    data: input,
+    where: { id },
   })
 }
 
@@ -32,4 +27,13 @@ export const deleteFeedback = ({ id }) => {
   return db.feedback.delete({
     where: { id },
   })
+}
+
+export const Feedback = {
+  translation: (_obj, { root }) => {
+    return db.feedback.findUnique({ where: { id: root?.id } }).translation()
+  },
+  User: (_obj, { root }) => {
+    return db.feedback.findUnique({ where: { id: root?.id } }).User()
+  },
 }

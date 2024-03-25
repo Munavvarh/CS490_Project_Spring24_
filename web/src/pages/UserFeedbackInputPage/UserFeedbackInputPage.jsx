@@ -19,11 +19,7 @@ const UserFeedbackInputPage = () => {
           <h2 className="home-section-title mt-4">Leave Feedback</h2>
           <p className="home-section-text">
             We are always looking to improve SyntaxSwitch, so please give us any
-            feedback in the form below. If your feedback concerns a specific
-            code translation, please include information relevant to the
-            translation in your feedback description, like your input and
-            language output, as well as the relevant input and output code in
-            the respective fields.
+            feedback in the form below. Please be specific!
           </p>
           <div className="mb-8 mt-8">
             <UserFeedbackForm />

@@ -6,10 +6,16 @@ export const QUERY = gql`
       id
       createdAt
       score
-      email
+      translation {
+        originalCode
+        translatedCode
+      }
+      translationId
       review
-      codeInput
-      codeOutput
+      User {
+        email
+      }
+      userId
     }
   }
 `

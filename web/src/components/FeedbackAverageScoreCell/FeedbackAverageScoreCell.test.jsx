@@ -1,7 +1,8 @@
 import { render, screen } from '@redwoodjs/testing/web'
 
+import { standard } from 'src/components/UserFeedbackListCell/UserFeedbackListCell.mock'
+
 import { Loading, Empty, Failure, Success } from './FeedbackAverageScoreCell'
-import { standard } from './FeedbackAverageScoreCell.mock'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.

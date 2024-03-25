@@ -17,7 +17,7 @@ const UserFeedback = ({ feedback }) => {
           </time>
         </header>
         <p>
-          <b>Email:</b> {feedback.email}
+          <b>Email:</b> {feedback.User.email}
         </p>
         <p>
           <b>Review:</b> {feedback.review}
@@ -37,10 +37,10 @@ const UserFeedback = ({ feedback }) => {
           <tbody>
             <tr>
               <td className="border border-black">
-                <code>{feedback.codeInput}</code>
+                <code>{feedback.translation.originalCode}</code>
               </td>
               <td className="border border-black">
-                <code>{feedback.codeOutput}</code>
+                <code>{feedback.translation.translatedCode}</code>
               </td>
             </tr>
           </tbody>
