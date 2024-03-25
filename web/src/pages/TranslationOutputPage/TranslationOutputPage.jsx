@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useMutation, gql } from '@redwoodjs/web';
 import { useLocation } from '@redwoodjs/router';
 import { Link, routes } from '@redwoodjs/router';
 import MainLayout from 'src/layouts/MainLayout/MainLayout';
+import { useMutation, gql } from '@redwoodjs/web';
 
 const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
   mutation CreateTranslationHistoryMutation($input: CreateTranslationHistoryInput!) {
@@ -16,8 +16,8 @@ const TranslationOutputPage = () => {
   const location = useLocation();
   const [inputCode, setInputCode] = useState('');
   const [outputCode, setOutputCode] = useState('');
-  const [sourceLang, setSourceLang] = useState('');
-  const [targetLang, setTargetLang] = useState('');
+  const [sourceLang, setSourceLang] = useState('java'); // Default language set to Java
+  const [targetLang, setTargetLang] = useState('python'); // Default language set to Python
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -43,28 +43,56 @@ const TranslationOutputPage = () => {
     element.click();
     document.body.removeChild(element); // Clean up
   };
-
   const handleTranslateClick = async () => {
-    const translatedCode = inputCode; // Placeholder for actual translation logic
-    setOutputCode(translatedCode);
-
     try {
-      await createTranslationHistory({
-        variables: {
-          input: {
-            userId: 1, // Replace with logic to retrieve the current user's ID
-            originalCode: inputCode,
-            translatedCode,
-            originalLanguage: sourceLang,
-            translationLanguage: targetLang,
-            status: 'COMPLETED',
-          },
+      const response = await fetch('http://localhost:3001/translate-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          inputCode,
+          sourceLang,
+          targetLang,
+        }),
       });
-      alert('Translation saved successfully!');
+
+      const data = await response.json();
+
+      if (!data.success) {
+        let errorMessage = 'An error occurred. Please try again.';
+        if (response.status === 429) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment and try again later.';
+        } else if (response.status === 400) {
+          errorMessage = 'Invalid request. Please check your input and try again.';
+        } else if (response.status === 503) {
+          errorMessage = 'Service temporarily unavailable. Please try again later.';
+        }
+        alert(errorMessage);
+      } else {
+        setOutputCode(data.translatedCode);
+
+        // Assuming user ID retrieval logic is implemented elsewhere
+        const userId = 13; // Placeholder: replace with actual logic to retrieve the current user's ID
+
+        // Create translation history record linked to the user
+        await createTranslationHistory({
+          variables: {
+            input: {
+              userId, // Using the retrieved or placeholder user ID
+              originalCode: inputCode,
+              translatedCode: data.translatedCode,
+              originalLanguage: sourceLang,
+              translationLanguage: targetLang,
+              status: 'COMPLETED',
+            },
+          },
+        });
+        alert('Translation saved successfully!');
+      }
     } catch (error) {
-      console.error('Error saving translation:', error);
-      alert('Failed to save translation.');
+      console.error('Error:', error);
+      alert('Error sending translation request. Please check your network connection and try again. Check if you are logged in');
     }
   };
 
@@ -90,29 +118,34 @@ const TranslationOutputPage = () => {
           <label htmlFor="sourceLang" className="code-extra-label">
             Language of your code:
           </label>
-          <input
+          <select
             id="sourceLang"
-            type="text"
-            placeholder="Language of your code"
-            className="form-input input-half-width mt-1 rounded-md border-2 border-black p-2 shadow-md"
+            className="form-select mt-1 rounded-md border-2 border-black p-2 shadow-md"
             value={sourceLang}
             onChange={(e) => setSourceLang(e.target.value)}
-          />
+          >
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+          </select>
         </div>
 
         <div className="mb-4">
           <label htmlFor="targetLang" className="code-extra-label">
             Translation Language:
           </label>
-          <input
+          <select
             id="targetLang"
-            type="text"
-            placeholder="Translation Language"
-            className="form-input input-half-width mt-1 rounded-md border-2 border-black p-2 shadow-md"
+            className="form-select mt-1 rounded-md border-2 border-black p-2 shadow-md"
             value={targetLang}
             onChange={(e) => setTargetLang(e.target.value)}
-          />
+          >
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+          </select>
         </div>
+
 
         <div className="mb-4 flex justify-between">
           <button onClick={handleTranslateClick} className="btn-translate">

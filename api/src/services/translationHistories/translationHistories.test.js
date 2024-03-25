@@ -1,3 +1,4 @@
+// Import necessary functions and db from your service file
 import {
   translationHistories,
   translationHistory,
@@ -22,6 +23,8 @@ describe('translationHistories', () => {
         originalCode: 'console.log("hello world")',
         translatedCode: 'print("hello world")',
         status: 'COMPLETED',
+        originalLanguage: 'JavaScript',
+        translationLanguage: 'Python',
       },
     })
     return { user, translationHistory }
@@ -49,22 +52,25 @@ describe('translationHistories', () => {
   })
 
   it('creates a translationHistory', async () => {
-    const newTranslationHistory = {
+    const newTranslationHistoryInput = {
       userId: scenarioData.user.id,
-      originalCode: 'String',
-      translatedCode: 'String',
-      status: 'String',
+      originalCode: 'console.log("hello new world")',
+      translatedCode: 'print("hello new world")',
+      status: 'COMPLETED',
+      originalLanguage: 'JavaScript',
+      translationLanguage: 'Python',
     }
-    const result = await createTranslationHistory({ input: newTranslationHistory })
-    expect(result).toEqual(expect.objectContaining(newTranslationHistory))
+    const result = await createTranslationHistory({ input: newTranslationHistoryInput })
+    expect(result).toEqual(expect.objectContaining(newTranslationHistoryInput))
   })
 
   it('updates a translationHistory', async () => {
+    const updatedData = { originalCode: 'console.log("updated world")' };
     const result = await updateTranslationHistory({
       id: scenarioData.translationHistory.id,
-      input: { originalCode: 'String2' },
+      input: updatedData,
     })
-    expect(result.originalCode).toEqual('String2')
+    expect(result.originalCode).toEqual(updatedData.originalCode)
   })
 
   it('deletes a translationHistory', async () => {
