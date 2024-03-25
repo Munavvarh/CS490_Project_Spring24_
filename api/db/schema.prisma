@@ -6,7 +6,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://navos:1234@localhost:3306/test"
+  url      = "mysql://test:1234@localhost:3306/test"
 }
 
 generator client {
@@ -40,15 +40,16 @@ model Feedback {
 }
 
 model TranslationHistory {
-  id            Int      @id @default(autoincrement())
-  userId        Int      // Links to the User model's ID
-  originalCode  String
-  translatedCode String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  status        String   // Could be an enum if you have predefined statuses
-  originalLanguage   String
+  id                  Int      @id @default(autoincrement())
+  userId              Int      // Links to the User model's ID
+  originalCode        String   @db.Text
+  translatedCode      String   @db.Text
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  status              String   // Could be an enum if you have predefined statuses
+  originalLanguage    String
   translationLanguage String
-  user          User     @relation(fields: [userId], references: [id])
+  user                User     @relation(fields: [userId], references: [id])
 }
+
 
