@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     question: "Do I need an account to use SyntaxSwitch?",
-    answer: "Basic functionality is available without an account. However, signing up enables access to advanced features and personalization options.",
+    answer: "Yes, functionality is not available without an accoun. signing up enables access to advanced features and personalization options.",
   },
   {
     question: "How do I report a bug or request a new feature?",

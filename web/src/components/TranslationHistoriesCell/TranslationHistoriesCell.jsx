@@ -1,6 +1,7 @@
 // Import necessary dependencies from RedwoodJS
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import { useAuth } from 'src/auth';
 
 export const QUERY = gql`
   query FindTranslationHistoriesQuery {
@@ -28,6 +29,12 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ translationHistories }) => {
+  const { currentUser } = useAuth(); // Use the useAuth hook to get the current user
+
+  // Client-side filtering to only show histories belonging to the current user
+  const userTranslationHistories = translationHistories.filter(history => history.userId === currentUser?.id)
+  
+
   const styles = {
     table: {
       width: '100%',
@@ -94,7 +101,7 @@ export const Success = ({ translationHistories }) => {
           </tr>
         </thead>
         <tbody>
-          {translationHistories.map((history) => (
+          {userTranslationHistories.length > 0 ? userTranslationHistories.map((history) => (
             <tr key={history.id}>
               <td style={styles.td}>{history.originalCode}</td>
               <td style={styles.td}>{history.translatedCode}</td>
@@ -105,17 +112,17 @@ export const Success = ({ translationHistories }) => {
               <td style={styles.td}>{history.translationLanguage}</td>
               <td style={{ ...styles.td, ...lastChildStyle }}>
                 <nav className="rw-table-actions">
-                <Link
-                  to={`${routes.translationOutput()}?originalCode=${encodeURIComponent(history.originalCode)}`}
-                  title={'Show translation history ' + history.id + ' detail'}
-                  style={styles.link}
-                >
-                  <button style={styles.button}>Change</button>
-                </Link>
+                  <Link
+                    to={`${routes.translationOutput()}?originalCode=${encodeURIComponent(history.originalCode)}`}
+                    title={'Show translation history ' + history.id + ' detail'}
+                    style={styles.link}
+                  >
+                    <button style={styles.button}>Change</button>
+                  </Link>
                 </nav>
               </td>
             </tr>
-          ))}
+          )) : <tr><td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">No translation histories found.</td></tr>}
         </tbody>
       </table>
     </div>
