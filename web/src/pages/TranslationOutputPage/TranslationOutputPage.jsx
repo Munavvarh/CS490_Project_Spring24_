@@ -3,7 +3,10 @@ import { useLocation } from '@redwoodjs/router';
 import { Link, routes } from '@redwoodjs/router';
 import MainLayout from 'src/layouts/MainLayout/MainLayout';
 import { useMutation, gql } from '@redwoodjs/web';
+import { useAuth } from 'src/auth';
 
+// Slide 2: Basic GPT-3 API Connection Setup
+// GQL Mutation for creating translation history, illustrating initial setup for database interaction.
 const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
   mutation CreateTranslationHistoryMutation($input: CreateTranslationHistoryInput!) {
     createTranslationHistory(input: $input) {
@@ -13,13 +16,17 @@ const CREATE_TRANSLATION_HISTORY_MUTATION = gql`
 `;
 
 const TranslationOutputPage = () => {
+  const { currentUser } = useAuth();
   const location = useLocation();
+  // State hooks represent UI components for user interaction, reflecting Slide 1's emphasis on frontend preparation.
   const [inputCode, setInputCode] = useState('');
   const [outputCode, setOutputCode] = useState('');
-  const [sourceLang, setSourceLang] = useState('java'); // Default language set to Java
-  const [targetLang, setTargetLang] = useState('python'); // Default language set to Python
+  const [sourceLang, setSourceLang] = useState('java');
+  const [targetLang, setTargetLang] = useState('python');
 
   useEffect(() => {
+    // Slide 1: Implement Code Translation API Integration
+    // Parsing URL parameters for code input demonstrates frontend-to-backend API integration preparation.
     const queryParams = new URLSearchParams(location.search);
     const originalCode = queryParams.get('originalCode');
     if (originalCode) {
@@ -29,6 +36,7 @@ const TranslationOutputPage = () => {
 
   const [createTranslationHistory] = useMutation(CREATE_TRANSLATION_HISTORY_MUTATION);
 
+  // Utility functions represent enhancements for user experience, indirectly related to API integration.
   const copyToClipboard = () => {
     navigator.clipboard.writeText(outputCode);
     alert('Copied to clipboard!');
@@ -41,9 +49,23 @@ const TranslationOutputPage = () => {
     element.download = 'TranslatedCode.txt';
     document.body.appendChild(element);
     element.click();
-    document.body.removeChild(element); // Clean up
+    document.body.removeChild(element);
   };
+
   const handleTranslateClick = async () => {
+    // Slide 1 & Slide 2: Addressing user authentication and input validation align with API usage prerequisites.
+    if (!currentUser) {
+      alert('Please log in to translate and save your code.');
+      return;
+    }
+
+    if (!inputCode.trim()) {
+      alert('Please enter the code in the input box before translating.');
+      return;
+    }
+
+    // Slide 3: Advanced GPT-3 API Integration and Error Handling
+    // This section is the core of API interaction, showcasing detailed request construction and response handling.
     try {
       const response = await fetch('http://localhost:3001/translate-code', {
         method: 'POST',
@@ -60,6 +82,7 @@ const TranslationOutputPage = () => {
       const data = await response.json();
 
       if (!data.success) {
+        // Comprehensive error handling from Slide 3, informing users of various potential API response issues.
         let errorMessage = 'An error occurred. Please try again.';
         if (response.status === 429) {
           errorMessage = 'Rate limit exceeded. Please wait a moment and try again later.';
@@ -70,16 +93,12 @@ const TranslationOutputPage = () => {
         }
         alert(errorMessage);
       } else {
+        // Successful API interaction leads to UI updates and database storage, reflecting full integration.
         setOutputCode(data.translatedCode);
-
-        // Assuming user ID retrieval logic is implemented elsewhere
-        const userId = 13; // Placeholder: replace with actual logic to retrieve the current user's ID
-
-        // Create translation history record linked to the user
         await createTranslationHistory({
           variables: {
             input: {
-              userId, // Using the retrieved or placeholder user ID
+              userId: currentUser.id,
               originalCode: inputCode,
               translatedCode: data.translatedCode,
               originalLanguage: sourceLang,
@@ -91,8 +110,9 @@ const TranslationOutputPage = () => {
         alert('Translation saved successfully!');
       }
     } catch (error) {
+      // Network error handling, emphasizing robustness in application's connectivity with the API.
       console.error('Error:', error);
-      alert('Error sending translation request. Please check your network connection and try again. Check if you are logged in');
+      alert('Error sending translation request. Please check your network connection and try again.');
     }
   };
 
