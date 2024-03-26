@@ -4501,6 +4501,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^5.11.0":
+  version: 5.11.0
+  resolution: "@prisma/client@npm:5.11.0"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 10c0/4c314e5b9d0ae880cd048cfa224a017d5d044a850efadf189e02937abc09a24de764d62738cea7016c8af31dfa18069d5a0f7c4ac99a0b6e454987d5c3afbbfe
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:5.9.1":
   version: 5.9.1
   resolution: "@prisma/debug@npm:5.9.1"
@@ -17850,7 +17862,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"map-visit@npm:^1.0.0":
+"map-vis
+
+it@npm:^1.0.0":
   version: 1.0.0
   resolution: "map-visit@npm:1.0.0"
   dependencies:
@@ -17879,7 +17893,10 @@ __metadata:
   languageName: node
   linkType: hard
 
+
 "md5@npm:2.3.0, md5@npm:^2.3.0":
+
+
   version: 2.3.0
   resolution: "md5@npm:2.3.0"
   dependencies:
@@ -21714,6 +21731,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@prisma/client": "npm:^5.11.0"
     "@redwoodjs/cli-storybook": "npm:7.0.6"
     "@redwoodjs/core": "npm:7.0.6"
     "@redwoodjs/project-config": "npm:7.0.6"

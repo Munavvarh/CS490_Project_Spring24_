@@ -1,8 +1,9 @@
 // web/src/components/NavBar/NavBar.js
-
 import { Link } from '@redwoodjs/router'
+import { useAuth } from 'src/auth'
 
 const NavBar = () => {
+  const { isAuthenticated, logOut } = useAuth()
   return (
     <nav className="navbar">
       <Link to="/home" className="navbar-logo">
@@ -11,19 +12,31 @@ const NavBar = () => {
       </Link>
       <ul className="navbar-nav flex">
         <li className="navbar-item ">
-          <Link to="/home" className="navbar-link">Home</Link>
+          <Link to="/home" className="navbar-link">
+            Home
+          </Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/translation-output" className="navbar-link">Translator Tool</Link>
+          <Link to="/translation-output" className="navbar-link">
+            Translator Tool
+          </Link>
         </li>
         <li className="navbar-item ">
           <Link to="/documentation" className="navbar-link ">Documentation</Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/Feedback" className="navbar-link ">Feedback</Link>
+          <Link to="/Feedback" className="navbar-link ">
+            Feedback
+          </Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/login" className="navbar-link ">Login/Signup</Link>
+          {isAuthenticated ? (
+            <button onClick={logOut}>Log Out</button>
+          ) : (
+            <Link to="/login" className="navbar-link ">
+              Login/Signup
+            </Link>
+          )}
         </li>
       </ul>
     </nav>
