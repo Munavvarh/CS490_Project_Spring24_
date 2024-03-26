@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Set, Router, Route } from '@redwoodjs/router'
+import { Router, Route } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
@@ -16,6 +16,8 @@ import { useAuth } from './auth'
 const Routes = () => {
 return (
     <Router useAuth={useAuth}>
+      <Route path="/translation-history" page={TranslationHistoryPage} name="translationHistory" />
+      <Route path="/documentation" page={DocumentationPage} name="documentation" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />

@@ -3,34 +3,36 @@ export const schema = gql`
     id: Int!
     createdAt: DateTime!
     score: Int!
-    email: String
+    translation: TranslationHistory!
+    translationId: Int!
     review: String
-    codeInput: String
-    codeOutput: String
+    User: User!
+    userId: Int!
   }
 
   type Query {
-    feedbacks: [Feedback!]! @skipAuth
+    feedbacks: [Feedback!]! @requireAuth
+    feedback(id: Int!): Feedback @requireAuth
   }
 
   input CreateFeedbackInput {
     score: Int!
-    email: String
+    translationId: Int!
     review: String
-    codeInput: String
-    codeOutput: String
+    userId: Int!
   }
 
   input UpdateFeedbackInput {
     score: Int
-    email: String
+    translationId: Int
     review: String
-    codeInput: String
-    codeOutput: String
+    userId: Int
   }
 
   type Mutation {
-    createFeedback(input: CreateFeedbackInput!): Feedback! @skipAuth
+    createFeedback(input: CreateFeedbackInput!): Feedback! @requireAuth
+    updateFeedback(id: Int!, input: UpdateFeedbackInput!): Feedback!
+      @requireAuth
     deleteFeedback(id: Int!): Feedback! @requireAuth
   }
 `

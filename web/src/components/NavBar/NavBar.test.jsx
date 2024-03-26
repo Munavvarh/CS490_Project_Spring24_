@@ -39,12 +39,13 @@ describe('NavBar Component', () => {
     const feedbackLink = screen.getByText(/feedback/i)
     const loginLink = screen.getByText(/login\/signup/i)
 
-    expect(homeLink.getAttribute('href')).toBe('/home')
-    expect(translatorLink.getAttribute('href')).toBe('/translation-output')
-    expect(documentationLink.getAttribute('href')).toBe('/Documentation')
-    expect(feedbackLink.getAttribute('href')).toBe('/Feedback')
-    expect(loginLink.getAttribute('href')).toBe('/login')
-  })
+    expect(homeLink.getAttribute('href')).toBe('/home');
+    expect(translatorLink.getAttribute('href')).toBe('/translation-output');
+    expect(documentationLink.getAttribute('href')).toBe('/documentation');
+    expect(feedbackLink.getAttribute('href')).toBe('/Feedback');
+    expect(loginLink.getAttribute('href')).toBe('/login');
+  });
+
 
   it('renders logout button when user is authenticated', () => {
     const logOut = jest.fn()

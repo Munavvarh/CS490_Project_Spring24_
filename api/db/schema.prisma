@@ -6,7 +6,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = env("MYSQL_URL")
+  url      = "mysql://test:1234@localhost:3306/test"
 }
 
 generator client {
@@ -18,21 +18,48 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 // TODO: Please remove the following example:
 model User {
-  id                  Int       @id @default(autoincrement())
-  name                String?
-  email               String    @unique
-  hashedPassword      String
-  salt                String
-  resetToken          String?
-  resetTokenExpiresAt DateTime?
+  id                   Int                  @id @default(autoincrement())
+  name                 String?
+  email                String               @unique
+  hashedPassword       String
+  salt                 String
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  translationHistories TranslationHistory[]
+  Feedback             Feedback[]
 }
 
 model Feedback {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  score      Int
-  email      String?
-  review     String?
-  codeInput  String?
-  codeOutput String?
+  id            Int                @id @default(autoincrement())
+  createdAt     DateTime           @default(now())
+  score         Int
+  translation   TranslationHistory @relation(fields: [translationId], references: [id])
+  translationId Int                @unique
+  review        String?
+  User          User               @relation(fields: [userId], references: [id])
+  userId        Int
+}
+
+model Error {
+  id            Int                @id @default(autoincrement())
+  createdAt     DateTime           @default(now())
+  translation   TranslationHistory @relation(fields: [translationId], references: [id])
+  translationId Int                @unique
+  title         String
+  description   String
+}
+
+model TranslationHistory {
+  id                  Int     @id @default(autoincrement())
+  userId              Int // Links to the User model's ID
+  originalCode        String   @db.Text
+  translatedCode      String   @db.Text
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  status              String // Could be an enum if you have predefined statuses
+  originalLanguage    String
+  translationLanguage String
+  user                User      @relation(fields: [userId], references: [id])
+  Feedback            Feedback?
+  Error               Error?
 }
