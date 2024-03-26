@@ -76,13 +76,13 @@ const LoginPage = () => {
                       className="rw-label mb-2 block text-sm font-medium text-gray-900"
                       errorClassName="rw-label rw-label-error"
                     >
-                      Your email
+                      Username
                     </Label>
                     <TextField
                       name="username"
                       className="rw-input bg-gray-50 border rounded focus:ring-primary-600 focus:border-primary-600 p-2.5 block w-full border-gray-300 text-gray-900 sm:text-sm"
                       errorClassName="rw-input rw-input-error"
-                      placeholder="name@email.com"
+                      placeholder="BMT"
                       ref={usernameRef}
                       validation={{
                         required: {
