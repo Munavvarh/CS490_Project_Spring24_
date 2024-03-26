@@ -93,3 +93,13 @@ test('accepts input code and validates language selection', async () => {
     // specific elements' existence or events.
   });
 });
+
+const { sanitizeInput } = require('./TranslationOutputPage');
+
+describe('Sanitization Logic', () => {
+  it('should sanitize input by removing HTML tags', () => {
+    const inputCode = '&lt;script&gt;alert(\"Hack!\")&lt;/script&gt;console.log(\"Hello, world!\");';
+    const expectedOutput = '&amp;lt;script&amp;gt;alert(\"Hack!\")&amp;lt;/script&amp;gt;console.log(\"Hello, world!\");';
+    expect(sanitizeInput(inputCode)).toBe(expectedOutput);
+  });
+});
