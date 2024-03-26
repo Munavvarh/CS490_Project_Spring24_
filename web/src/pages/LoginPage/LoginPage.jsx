@@ -15,7 +15,7 @@ import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
-import MainLayout from 'src/layouts/MainLayout/MainLayout'
+
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
