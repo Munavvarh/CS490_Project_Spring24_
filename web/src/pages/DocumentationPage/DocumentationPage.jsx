@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     question: "What languages does SyntaxSwitch support?",
-    answer: "SyntaxSwitch supports a wide range of programming languages, leveraging the GPT-3 API for seamless translation. For a full list, access the tool's language selection dropdown.",
+    answer: "SyntaxSwitch supports a wide range of programming languages, leveraging the GPT-3 API for seamless translation. Which curretnly includes Python,Java,Javascript For a future refrence full list, access the tool's language selection dropdown.",
   },
   {
     question: "Can I check the API status?",
@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     question: "Is there a limit to how much code I can translate at once?",
-    answer: "There might be limitations based on the current API usage and server capacity. Please refer to the API Status page for more information.",
+    answer: "There might be limitations based on the current API usage and server capacity. You will get an alert if applicable. Please refer to the API Status page for more information.",
   },
   {
     question: "How accurate is the code translation?",
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     question: "Can I contribute to improving SyntaxSwitch?",
-    answer: "Absolutely! Feedback and contributions are welcome. Visit our GitHub repository or use the Feedback link to share your thoughts.",
+    answer: "Absolutely! Feedback and contributions are welcome. You can use the Feedback link to share your thoughts or the feedback pop up that comes after every transaltion asking for review. Also, you can visit our GitHub repository.",
   },
   {
     question: "Do I need an account to use SyntaxSwitch?",
@@ -91,6 +91,7 @@ const DocumentationPage = () => {
               <li> For how to utilize SyntaxSwitch website visit the quickstart section on  <a href="/home" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'> - HomePage</a></li>
               <li> Contact us for personalized assistance.<a href="/Feedback" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'> - Feedback</a></li>
               <li>Visit our gitHub repository for more technical details and examples. <a href="https://github.com/Munavvarh/CS490_Project_Spring24_" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'>- Github</a></li>
+              <li>Learn about our GPT API rate limits and error handling on the <a href="https://platform.openai.com/docs/guides/rate-limits/error-mitigation?context=tier-free" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'>API Usage & Errors</a> page for detailed guidance and best practices.</li>
             </ul>
           </section>
 
