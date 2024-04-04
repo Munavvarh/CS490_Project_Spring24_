@@ -43,6 +43,15 @@ describe('users', () => {
     expect(result.email).toEqual('String96027122')
   })
 
+  scenario('updates a user password', async (scenario) => {
+    const original = await user({ id: scenario.user.one.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { hashedPassword: 'testpass' },
+    })
+    expect(result.hashedPassword).toEqual('testpass')
+  })
+
   scenario('deletes a user', async (scenario) => {
     const original = await deleteUser({ id: scenario.user.one.id })
     const result = await user({ id: original.id })
