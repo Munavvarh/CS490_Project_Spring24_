@@ -58,7 +58,11 @@ const NavBar = () => {
           </li>
           <li className="navbar-item ">
             {isAuthenticated && currentUser ? (
-              <button onClick={logOut}>Log Out - {user.name}</button>
+              <div className="relative inline-block text-left">
+                <div>
+                  <button onClick={logOut}>Log Out - {user.name}</button>
+                </div>
+              </div>
             ) : (
               <Link to="/login" className="navbar-link ">
                 Login/Signup
