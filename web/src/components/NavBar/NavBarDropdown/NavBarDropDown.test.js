@@ -3,8 +3,8 @@ import NavBarDropDown from './NavBarDropDown'
 
 describe('NavBarDropDown', () => {
   it('renders the button', () => {
-    const { getByText } = render(<NavBarDropDown />)
-    const button = getByText('User')
+    const { getByTestId } = render(<NavBarDropDown />)
+    const button = getByTestId('dropdown-button')
     expect(button).toBeInTheDocument()
   })
 
@@ -15,8 +15,8 @@ describe('NavBarDropDown', () => {
   })
 
   it('closes the menu when the button is clicked again', () => {
-    const { getByText, queryByText } = render(<NavBarDropDown />)
-    const button = getByText('User')
+    const { getByTestId, queryByText } = render(<NavBarDropDown />)
+    const button = getByTestId('dropdown-button')
     fireEvent.click(button)
     fireEvent.click(button)
     const menu = queryByText('Account Settings')

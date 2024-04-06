@@ -5,6 +5,7 @@ import { gql } from 'graphql-tag'
 import { GraphQLHooksProvider } from '@redwoodjs/web'
 import { useEffect, useState } from 'react'
 import { useAuth } from 'src/auth'
+import NavBarDropDown from './NavBarDropdown/NavBarDropDown'
 
 const GET_USER_NAME = gql`
   query GetUserName($userId: Int!) {
@@ -58,9 +59,16 @@ const NavBar = () => {
           </li>
           <li className="navbar-item ">
             {isAuthenticated && currentUser ? (
-              <div className="relative inline-block text-left">
-                <div>
-                  <button onClick={logOut}>Log Out - {user.name}</button>
+              // <div className="relative inline-block text-left">
+              //   <div>
+              //     <button onClick={logOut}>Log Out - {user.name}</button>
+              //   </div>
+              // </div>
+              <div>
+                <div className="flex-grow block w-full lg:flex lg:w-auto lg:items-center">
+                  <div className="lg:flex-grow text-sm">
+                    <NavBarDropDown user={user} />
+                  </div>
                 </div>
               </div>
             ) : (
