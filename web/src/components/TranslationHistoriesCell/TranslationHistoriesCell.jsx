@@ -1,7 +1,8 @@
 // Import necessary dependencies from RedwoodJS
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+//import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from 'src/auth';
+import React, { useState } from 'react';
 
 export const QUERY = gql`
   query FindTranslationHistoriesQuery {
@@ -30,10 +31,32 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ translationHistories }) => {
   const { currentUser } = useAuth(); // Use the useAuth hook to get the current user
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' or 'desc'
 
-  // Client-side filtering to only show histories belonging to the current user
-  const userTranslationHistories = translationHistories.filter(history => history.userId === currentUser?.id)
-  
+  const toggleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedTranslationHistories = [...translationHistories].sort((a, b) => {
+    if (!sortColumn) return 0;
+    let isReversed = sortDirection === 'asc' ? 1 : -1;
+    switch (sortColumn) {
+      case 'createdAt':
+      case 'updatedAt':
+        return isReversed * (new Date(a[sortColumn]) - new Date(b[sortColumn]));
+      case 'originalLanguage':
+      case 'translationLanguage':
+        return isReversed * a[sortColumn].localeCompare(b[sortColumn]);
+      default:
+        return 0;
+    }
+  }).filter(history => history.userId === currentUser?.id);
 
   const styles = {
     table: {
@@ -44,6 +67,7 @@ export const Success = ({ translationHistories }) => {
       borderCollapse: 'collapse', // Ensures borders collapse into a single border
     },
     th: {
+      cursor: 'pointer',
       verticalAlign: 'bottom',
       borderBottom: '2px solid #007bff', // Blue border for table headers
       borderRight: '1px solid #007bff', // Vertical borders
@@ -92,16 +116,16 @@ export const Success = ({ translationHistories }) => {
           <tr>
             <th style={styles.th}>Original Code</th>
             <th style={styles.th}>Translated Code</th>
-            <th style={styles.th}>Translated On</th>
-            <th style={styles.th}>Last Updated</th>
+            <th style={styles.th} onClick={() => toggleSort('createdAt')}>Translated On</th>
+            <th style={styles.th} onClick={() => toggleSort('updatedAt')}>Last Updated</th>
             <th style={styles.th}>Status</th>
-            <th style={styles.th}>Original Language</th>
-            <th style={styles.th}>Translation Language</th>
+            <th style={styles.th} onClick={() => toggleSort('originalLanguage')}>Original Language</th>
+            <th style={styles.th} onClick={() => toggleSort('translationLanguage')}>Translation Language</th>
             <th style={{ ...styles.th, ...lastChildStyle }}>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
-          {userTranslationHistories.length > 0 ? userTranslationHistories.map((history) => (
+          {sortedTranslationHistories.length > 0 ? sortedTranslationHistories.map((history) => (
             <tr key={history.id}>
               <td style={styles.td}>{history.originalCode}</td>
               <td style={styles.td}>{history.translatedCode}</td>
