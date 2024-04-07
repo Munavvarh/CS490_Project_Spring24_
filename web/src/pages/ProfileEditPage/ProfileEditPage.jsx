@@ -1,7 +1,29 @@
 import React from 'react'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
+import { useQuery } from '@redwoodjs/web'
+import { gql } from 'graphql-tag'
+import { useEffect } from 'react'
+import { useAuth } from 'src/auth'
+
+const GET_USER_NAME = gql`
+  query GetUserName($userId: Int!) {
+    user(id: $userId) {
+      name
+      email
+    }
+  }
+`
 
 const ProfileEditPage = () => {
+  const { isAuthenticated, currentUser } = useAuth()
+  const { data } = useQuery(GET_USER_NAME, {
+    variables: { userId: currentUser?.id },
+    skip: !isAuthenticated || !currentUser,
+  })
+
+  useEffect(() => {}, [isAuthenticated])
+  const user = data?.user || ''
+
   return (
     <MainLayout>
       <main className="rw-main mx-auto flex min-h-screen w-full flex-col items-center justify-center px-6 py-1 py-8 md:h-screen md:w-2/3 lg:py-0">
@@ -33,8 +55,9 @@ const ProfileEditPage = () => {
                 </div>
                 <div className="flex flex-col space-y-5 sm:ml-8">
                   <div>
-                    <div>Username</div>
-                    <div>Email</div>
+                    <span className="text-gray-500">Signed in as:</span>
+                    <div className="font-bold text-gray-700">{user.name}</div>
+                    <div className="font-bold text-gray-700">{user.email}</div>
                   </div>
                   <button
                     type="button"
@@ -48,7 +71,7 @@ const ProfileEditPage = () => {
                 Edit Profile
               </h2>
               <hr />
-              <div className="sm:mt-14 mt-8 items-center">
+              <div className="mt-8 items-center sm:mt-10">
                 {/* username field */}
                 <div className="mb-2 sm:mb-6">
                   <label
@@ -60,7 +83,7 @@ const ProfileEditPage = () => {
                   <input
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
-                    placeholder="your username"
+                    placeholder={user.name}
                   />
                 </div>
                 {/* email */}
@@ -75,17 +98,17 @@ const ProfileEditPage = () => {
                     id="profession"
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
-                    placeholder="your email"
+                    placeholder={user.email}
                   />
                 </div>
               </div>
 
               {/* save & delete button */}
-              <div class="mt-7 flex w-full justify-between">
-                <button class="rounded-lg border-none bg-red-500 px-4 py-2 text-white hover:bg-blue-800 hover:shadow-inner dark:bg-red-600 dark:hover:bg-red-700">
+              <div className="mt-7 flex w-full justify-between">
+                <button className="rounded-lg border-none bg-red-500 px-4 py-2 text-white hover:bg-blue-800 hover:shadow-inner dark:bg-red-600 dark:hover:bg-red-700">
                   Delete Account
                 </button>
-                <button class="focus:ring-4 focus:outline-none  focus:ring-blue-300 py-2.5 dark:focus:ring-blue-800 w-full rounded-lg bg-blue-500 px-5 text-center text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:w-auto">
+                <button className="focus:ring-4 focus:outline-none  focus:ring-blue-300 py-2.5 dark:focus:ring-blue-800 w-full rounded-lg bg-blue-500 px-5 text-center text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:w-auto">
                   Save Changes
                 </button>
               </div>
