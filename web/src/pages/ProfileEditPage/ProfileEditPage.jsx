@@ -1,9 +1,10 @@
 import React from 'react'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
-import { useQuery } from '@redwoodjs/web'
+import { useQuery, useMutation } from '@redwoodjs/web'
 import { gql } from 'graphql-tag'
 import { useEffect } from 'react'
 import { useAuth } from 'src/auth'
+import { navigate, routes } from '@redwoodjs/router'
 
 const GET_USER_NAME = gql`
   query GetUserName($userId: Int!) {
@@ -13,9 +14,18 @@ const GET_USER_NAME = gql`
     }
   }
 `
+const DELETE_USER = gql`
+  mutation DeleteUser($id: Int!) {
+    deleteUser(id: $id) {
+      id
+    }
+  }
+`
 
 const ProfileEditPage = () => {
-  const { isAuthenticated, currentUser } = useAuth()
+  const { isAuthenticated, currentUser, logOut } = useAuth()
+  const [deleteUserMutation] = useMutation(DELETE_USER)
+  // const navigate = useNavigate()
   const { data } = useQuery(GET_USER_NAME, {
     variables: { userId: currentUser?.id },
     skip: !isAuthenticated || !currentUser,
@@ -23,6 +33,16 @@ const ProfileEditPage = () => {
 
   useEffect(() => {}, [isAuthenticated])
   const user = data?.user || ''
+
+  const handleDeleteUser = async () => {
+    try {
+      await deleteUserMutation({ variables: { id: currentUser?.id } })
+      logOut()
+      navigate('/home')
+    } catch (error) {
+      console.error('Error deleting user:', error)
+    }
+  }
 
   return (
     <MainLayout>
@@ -105,7 +125,10 @@ const ProfileEditPage = () => {
 
               {/* save & delete button */}
               <div className="mt-7 flex w-full justify-between">
-                <button className="rounded-lg border-none bg-red-500 px-4 py-2 text-white hover:bg-blue-800 hover:shadow-inner dark:bg-red-600 dark:hover:bg-red-700">
+                <button
+                  onClick={handleDeleteUser}
+                  className="rounded-lg border-none bg-red-500 px-4 py-2 text-white hover:bg-blue-800 hover:shadow-inner dark:bg-red-600 dark:hover:bg-red-700"
+                >
                   Delete Account
                 </button>
                 <button className="focus:ring-4 focus:outline-none  focus:ring-blue-300 py-2.5 dark:focus:ring-blue-800 w-full rounded-lg bg-blue-500 px-5 text-center text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:w-auto">

@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Router, Route } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
@@ -25,7 +25,9 @@ const Routes = () => {
       <Route path="/Feedback" page={UserFeedbackInputPage} name="userFeedbackInput" />
       <Route path="/Feedback-out" page={UserFeedbackOutputPage} name="userFeedbackOutput" />
       <Route path="/translation-output" page={TranslationOutputPage} name="translationOutput" />
-      <Route path="/edit-profile" page={ProfileEditPage} name="profilEdit" />
+      <PrivateSet unauthenticated="home">
+        <Route path="/edit-profile" page={ProfileEditPage} name="profilEdit" />
+      </PrivateSet>
       <Route path="/home" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
