@@ -2,9 +2,9 @@ import React from 'react'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
 import { useQuery, useMutation } from '@redwoodjs/web'
 import { gql } from 'graphql-tag'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from 'src/auth'
-import { navigate, routes } from '@redwoodjs/router'
+import { navigate } from '@redwoodjs/router'
 
 const GET_USER_NAME = gql`
   query GetUserName($userId: Int!) {
@@ -22,10 +22,21 @@ const DELETE_USER = gql`
   }
 `
 
+const UPDATE_USER_PROFILE = gql`
+  mutation UpdateUserProfile($id: Int!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      name
+      email
+    }
+  }
+`
+
 const ProfileEditPage = () => {
   const { isAuthenticated, currentUser, logOut } = useAuth()
   const [deleteUserMutation] = useMutation(DELETE_USER)
-  // const navigate = useNavigate()
+  const [updateUserProfile, { loading, error }] =
+    useMutation(UPDATE_USER_PROFILE)
   const { data } = useQuery(GET_USER_NAME, {
     variables: { userId: currentUser?.id },
     skip: !isAuthenticated || !currentUser,
@@ -33,6 +44,8 @@ const ProfileEditPage = () => {
 
   useEffect(() => {}, [isAuthenticated])
   const user = data?.user || ''
+  const [name, setName] = useState(user.name)
+  const [email, setEmail] = useState(user.email)
 
   const handleDeleteUser = async () => {
     try {
@@ -41,6 +54,23 @@ const ProfileEditPage = () => {
       navigate('/home')
     } catch (error) {
       console.error('Error deleting user:', error)
+    }
+  }
+
+  const handleUpdateUser = async () => {
+    try {
+      await updateUserProfile({
+        variables: {
+          id: currentUser?.id,
+          input: {
+            name,
+            email,
+          },
+        },
+      })
+      navigate('/home')
+    } catch (error) {
+      console.error('Error updating user:', error)
     }
   }
 
@@ -104,6 +134,7 @@ const ProfileEditPage = () => {
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 {/* email */}
@@ -119,6 +150,7 @@ const ProfileEditPage = () => {
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -131,7 +163,10 @@ const ProfileEditPage = () => {
                 >
                   Delete Account
                 </button>
-                <button className="focus:ring-4 focus:outline-none  focus:ring-blue-300 py-2.5 dark:focus:ring-blue-800 w-full rounded-lg bg-blue-500 px-5 text-center text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:w-auto">
+                <button
+                  className="focus:ring-4 focus:outline-none  focus:ring-blue-300 py-2.5 dark:focus:ring-blue-800 w-full rounded-lg bg-blue-500 px-5 text-center text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 sm:w-auto"
+                  onClick={handleUpdateUser}
+                >
                   Save Changes
                 </button>
               </div>
