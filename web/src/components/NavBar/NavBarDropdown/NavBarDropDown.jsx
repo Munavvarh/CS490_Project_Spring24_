@@ -1,3 +1,4 @@
+import { Link } from '@redwoodjs/router'
 import { useState } from 'react'
 import { GraphQLHooksProvider } from '@redwoodjs/web'
 import { useAuth } from 'src/auth'
@@ -41,12 +42,12 @@ const NavBarDropDown = ({ user }) => {
                 {user.email}
               </div>
               <hr className="border-t border-grey-light mx-2"></hr>
-              <a
-                href="#"
+              <Link
+                to="/edit-profile"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
               >
                 Account Settings
-              </a>
+              </Link>
               <button
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
                 onClick={logOut}

@@ -14,7 +14,7 @@ import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import { useAuth } from './auth'
 
 const Routes = () => {
-return (
+  return (
     <Router useAuth={useAuth}>
       <Route path="/translation-history" page={TranslationHistoryPage} name="translationHistory" />
       <Route path="/documentation" page={DocumentationPage} name="documentation" />
@@ -25,6 +25,7 @@ return (
       <Route path="/Feedback" page={UserFeedbackInputPage} name="userFeedbackInput" />
       <Route path="/Feedback-out" page={UserFeedbackOutputPage} name="userFeedbackOutput" />
       <Route path="/translation-output" page={TranslationOutputPage} name="translationOutput" />
+      <Route path="/edit-profile" page={ProfileEditPage} name="profilEdit" />
       <Route path="/home" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
