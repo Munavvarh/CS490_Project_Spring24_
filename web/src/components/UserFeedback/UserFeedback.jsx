@@ -22,13 +22,6 @@ const UserFeedback = ({ feedback }) => {
         <p>
           <b>Review:</b> {feedback.review}
         </p>
-        <p>
-          <b>Original Language:</b> {feedback.translation.originalLanguage}
-        </p>
-        <p>
-          <b>Translation Language:</b>{' '}
-          {feedback.translation.translationLanguage}
-        </p>
 
         <table className="w-fit table-fixed border-collapse grid-cols-2 grid-rows-2">
           <thead>
@@ -43,10 +36,10 @@ const UserFeedback = ({ feedback }) => {
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black align-text-top">
+              <td className="border border-black">
                 <code>{feedback.translation.originalCode}</code>
               </td>
-              <td className="border border-black align-text-top">
+              <td className="border border-black">
                 <code>{feedback.translation.translatedCode}</code>
               </td>
             </tr>

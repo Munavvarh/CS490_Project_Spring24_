@@ -25,46 +25,50 @@ const NavBar = () => {
   useEffect(() => {}, [isAuthenticated]) //could be deleted later - wanted to make call once
   const user = data?.user || ''
 
-return (
-  <GraphQLHooksProvider>
-    <nav className="navbar">
-      <Link to="/home" className="navbar-logo">
-        <img src="/logo.png" alt="Syntax Switch Logo" className="logo-image" />
-      </Link>
-      <ul className="navbar-nav flex">
-        <li className="navbar-item">
-          <Link to="/home" className="navbar-link">
-            Home
-          </Link>
-        </li>
-        <li className="navbar-item">
-          <Link to="/translation-output" className="navbar-link">
-            Translator Tool
-          </Link>
-        </li>
-        <li className="navbar-item">
-          <Link to="/documentation" className="navbar-link">
-            Documentation
-          </Link>
-        </li>
-        <li className="navbar-item">
-          <Link to="/contact-us" className="navbar-link">
-            Contact Us
-          </Link>
-        </li>
-        <li className="navbar-item">
-          {isAuthenticated && currentUser ? (
-            <button onClick={logOut}>Log Out - {currentUser.name}</button>
-          ) : (
-            <Link to="/login" className="navbar-link">
-              Login/Signup
+  return (
+    <GraphQLHooksProvider>
+      <nav className="navbar">
+        <Link to="/home" className="navbar-logo">
+          <img
+            src="/logo.png"
+            alt="Syntax Switch Logo"
+            className="logo-image"
+          />
+        </Link>
+        <ul className="navbar-nav flex">
+          <li className="navbar-item ">
+            <Link to="/home" className="navbar-link">
+              Home
             </Link>
-          )}
-        </li>
-      </ul>
-    </nav>
-  </GraphQLHooksProvider>
-);
+          </li>
+          <li className="navbar-item ">
+            <Link to="/translation-output" className="navbar-link">
+              Translator Tool
+            </Link>
+          </li>
+          <li className="navbar-item ">
+            <Link to="/documentation" className="navbar-link ">
+              Documentation
+            </Link>
+          </li>
+          <li className="navbar-item ">
+            <Link to="/Feedback" className="navbar-link ">
+              Feedback
+            </Link>
+          </li>
+          <li className="navbar-item ">
+            {isAuthenticated && currentUser ? (
+              <button onClick={logOut}>Log Out - {user.name}</button>
+            ) : (
+              <Link to="/login" className="navbar-link ">
+                Login/Signup
+              </Link>
+            )}
+          </li>
+        </ul>
+      </nav>
+    </GraphQLHooksProvider>
+  )
+}
 
-export default NavBar;
-
+export default NavBar

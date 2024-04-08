@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import AdminNavigatePage from './AdminNavigatePage'
+import UserFeedbackInputPage from './UserFeedbackInputPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
-describe('AdminNavigatePage', () => {
+describe('UserFeedbackInputPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AdminNavigatePage />)
+      render(<UserFeedbackInputPage />)
     }).not.toThrow()
   })
 })
