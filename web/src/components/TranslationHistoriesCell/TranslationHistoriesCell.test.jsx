@@ -1,4 +1,5 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen, fireEvent } from '@redwoodjs/testing/web'
+import { within } from '@testing-library/dom'
 import { Loading, Empty, Failure, Success } from './TranslationHistoriesCell'
 import { standard } from './TranslationHistoriesCell.mock'
 
@@ -38,4 +39,8 @@ describe('TranslationHistoriesCell', () => {
       render(<Success translationHistories={standard().translationHistories} />)
     }).not.toThrow()
   })
+
 })
+
+
+
