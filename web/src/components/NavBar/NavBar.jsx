@@ -1,5 +1,6 @@
 // web/src/components/NavBar/NavBar.js
 import { Link } from '@redwoodjs/router'
+
 import { useAuth } from 'src/auth'
 
 const NavBar = () => {
@@ -22,11 +23,13 @@ const NavBar = () => {
           </Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/documentation" className="navbar-link ">Documentation</Link>
+          <Link to="/documentation" className="navbar-link ">
+            Documentation
+          </Link>
         </li>
         <li className="navbar-item ">
-          <Link to="/Feedback" className="navbar-link ">
-            Feedback
+          <Link to="/contact-us" className="navbar-link ">
+            Contact Us
           </Link>
         </li>
         <li className="navbar-item ">

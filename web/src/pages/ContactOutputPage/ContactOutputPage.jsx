@@ -1,17 +1,13 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
-import FeedbackAverageScoreCell from 'src/components/FeedbackAverageScoreCell'
-import UserFeedbackListCell from 'src/components/UserFeedbackListCell'
+import ContactListCell from 'src/components/ContactListCell'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
 
-const UserFeedbackOutputPage = () => {
+const ContactOutputPage = () => {
   return (
     <>
-      <Metadata
-        title="UserFeedbackOutput"
-        description="UserFeedbackOutput page"
-      />
+      <Metadata title="ContactOutput" description="ContactOutput page" />
 
       <MainLayout>
         <Link
@@ -21,14 +17,13 @@ const UserFeedbackOutputPage = () => {
           Back to admin navigation
         </Link>
         <div className="max-w-7xl container mx-auto px-4">
-          <h2 className="home-section-title mt-4">User Feedback Output</h2>
+          <h2 className="home-section-title mt-4">Contact Us Output</h2>
           <p className="home-section-text">
-            Below, you can find feedback submitted by users. The current average
-            feedback rating is:
+            Below is all of the messages that users have submitted on the
+            Contact Us page:
           </p>
-          <FeedbackAverageScoreCell />
           <div className="mb-4 mt-4">
-            <UserFeedbackListCell />
+            <ContactListCell />
           </div>
         </div>
       </MainLayout>
@@ -36,4 +31,4 @@ const UserFeedbackOutputPage = () => {
   )
 }
 
-export default UserFeedbackOutputPage
+export default ContactOutputPage
