@@ -13415,6 +13415,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"express-rate-limit@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "express-rate-limit@npm:7.2.0"
+  peerDependencies:
+    express: 4 || 5 || ^5.0.0-beta.1
+  checksum: 10c0/5b3d047d14b6de40fea355be8313ea205b4c7ddaa167c3683779038b8a203a62d4d0a995b1f0bb6fc540abfd5923ac9af905d2cf748fc28af1cb24aefd6c718c
+  languageName: node
+  linkType: hard
+
 "express@npm:^4.17.3, express@npm:^4.19.1":
   version: 4.19.1
   resolution: "express@npm:4.19.1"
@@ -14953,6 +14962,13 @@ __metadata:
   version: 3.2.5
   resolution: "headers-polyfill@npm:3.2.5"
   checksum: 10c0/10202f4ebfaecd6aa31305f29664f876ac01d9174a3fb8fcc5a0df3eaf9c1767fb0d6cf6f961484f2bfd2101b6768090976f146bd88aeedd07af4e741cb2dcb7
+  languageName: node
+  linkType: hard
+
+"helmet@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "helmet@npm:7.1.0"
+  checksum: 10c0/8c3370d07487be11ac918577c68952e05d779a1a2c037023c1ba763034c381a025899bc52f8acfab5209304a1dc618a3764dbfd26386a0d1173befe4fb932e84
   languageName: node
   linkType: hard
 
@@ -21645,6 +21661,8 @@ __metadata:
     cors: "npm:^2.8.5"
     dotenv: "npm:^16.4.5"
     express: "npm:^4.19.1"
+    express-rate-limit: "npm:^7.2.0"
+    helmet: "npm:^7.1.0"
     lang-detector: "npm:^1.0.6"
     openai: "npm:^4.29.2"
     prettier-plugin-tailwindcss: "npm:0.4.1"

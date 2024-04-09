@@ -287,14 +287,67 @@ describe('TranslationOutputPage', () => {
 
     it('Testing Error for unsupported languages', async () => {
       const response = await request(app).post('/translate-code').send({
-        inputCode: 'cout << "Thanks for viewing my code!";',
-        sourceLang: 'cobol', // Unsupported language
+        inputCode: 'cout << "Hello, World!";',
+        sourceLang: 'cobol', // Assuming 'cobol' is an unsupported language
         targetLang: 'python',
-      })
-      expect(response.statusCode).toBe(400)
-      expect(response.body.success).toBe(false)
-    })
+      });
+      expect(response.statusCode).toBe(400); // Expecting 400 for unsupported language, not 429
+      expect(response.body.error).toMatch(/Unsupported source or target language/);
+    });
+    
+    describe('/translate-code endpoint input validation', () => {
+      it('should reject requests with missing fields', async () => {
+        const response = await request(app).post('/translate-code').send({
+          sourceLang: 'javascript', // Missing 'inputCode' and 'targetLang'
+        });
+        expect(response.statusCode).toBe(400);
+        expect(response.body.error).toMatch(/Missing required fields/);
+      });
+    });
 
+    it('should reject unsupported source languages', async () => {
+      const response = await request(app).post('/translate-code').send({
+        inputCode: 'cout << "Hello, World!";',
+        sourceLang: 'cpp', // Unsupported language
+        targetLang: 'python',
+      });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toMatch(/Unsupported source or target language/);
+    });
+
+    it('should reject requests with input size exceeding the limit', async () => {
+      const largeInputCode = 'console.log("Hello");\n'.repeat(1501); // Exceeds the 1500 line limit
+      const response = await request(app).post('/translate-code').send({
+        inputCode: largeInputCode,
+        sourceLang: 'javascript',
+        targetLang: 'python',
+      });
+      expect(response.statusCode).toBe(429);
+      expect(response.body.error).toMatch(/Rate limit exceeded due to large input size/);
+    });
+    
+    
+    
     // Add more tests here for other scenarios and edge cases
   })
+
+  describe('/translate-code endpoint rate limiting', () => {
+    it('should enforce rate limiting', async () => {
+      const validPayload = {
+        inputCode: 'console.log("Hello, World!");',
+        sourceLang: 'javascript',
+        targetLang: 'python',
+      };
+  
+      // Send enough requests to trigger rate limiting
+      for (let i = 0; i <= 100; i++) {
+        await request(app).post('/translate-code').send(validPayload);
+      }
+  
+      const response = await request(app).post('/translate-code').send(validPayload);
+      expect(response.statusCode).toBe(429);
+    });
+  });
+
+
 })
