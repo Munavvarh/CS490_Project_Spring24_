@@ -7,8 +7,8 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { PrivateSet, Router, Route } from '@redwoodjs/router'
 
+import { PrivateSet, Router, Route } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
 import { useAuth } from './auth'
@@ -33,6 +33,9 @@ const Routes = () => {
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
 
       <Route path="/translation-output" page={TranslationOutputPage} name="translationOutput" />
+      <PrivateSet unauthenticated="home">
+        <Route path="/edit-profile" page={ProfileEditPage} name="profilEdit" />
+      </PrivateSet>
       <Route path="/home" page={HomePage} name="home" />
       <Route notfound page={NotFoundPage} />
     </Router>
