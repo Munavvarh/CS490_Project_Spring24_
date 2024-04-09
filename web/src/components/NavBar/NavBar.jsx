@@ -1,10 +1,14 @@
 // web/src/components/NavBar/NavBar.js
+import { useEffect, useState } from 'react'
+
+import { gql } from 'graphql-tag'
+
 import { Link } from '@redwoodjs/router'
 import { useQuery } from '@redwoodjs/web'
-import { gql } from 'graphql-tag'
 import { GraphQLHooksProvider } from '@redwoodjs/web'
-import { useEffect, useState } from 'react'
+
 import { useAuth } from 'src/auth'
+
 import NavBarDropDown from './NavBarDropdown/NavBarDropDown'
 
 const GET_USER_NAME = gql`
@@ -25,11 +29,15 @@ const NavBar = () => {
 
   useEffect(() => {}, [isAuthenticated]) //could be deleted later - wanted to make call once
   const user = data?.user || ''
- return (
+  return (
     <GraphQLHooksProvider>
       <nav className="navbar">
         <Link to="/home" className="navbar-logo">
-          <img src="/logo.png" alt="Syntax Switch Logo" className="logo-image" />
+          <img
+            src="/logo.png"
+            alt="Syntax Switch Logo"
+            className="logo-image"
+          />
         </Link>
         <ul className="navbar-nav flex">
           <li className="navbar-item">
@@ -70,6 +78,6 @@ const NavBar = () => {
         </ul>
       </nav>
     </GraphQLHooksProvider>
-  );
-   }
-  export default NavBar;
+  )
+}
+export default NavBar

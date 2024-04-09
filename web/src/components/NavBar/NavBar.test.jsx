@@ -1,11 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { AuthProvider } from 'src/auth'
+
 import { GraphQLHooksProvider } from '@redwoodjs/web'
-import NavBar from './NavBar'
-import NavBarDropDown from './NavBarDropdown/NavBarDropDown'
+
+import { AuthProvider } from 'src/auth'
 
 import NavBar from './NavBar'
+import NavBarDropDown from './NavBarDropdown/NavBarDropDown'
 
 describe('NavBar Component', () => {
   test('renders navigation links', () => {
@@ -52,22 +53,11 @@ describe('NavBar Component', () => {
     const contactLink = screen.getByText(/contact us/i)
     const loginLink = screen.getByText(/login\/signup/i)
 
-
     expect(homeLink).toHaveAttribute('href', '/home')
     expect(translatorLink).toHaveAttribute('href', '/translation-output')
     expect(documentationLink).toHaveAttribute('href', '/documentation')
     expect(contactLink).toHaveAttribute('href', '/contact-us')
     expect(loginLink).toHaveAttribute('href', '/login')
-  })
-
-  it('renders logout button when user is authenticated', () => {
-    const logOut = jest.fn()
-
-    render(
-      <AuthProvider isAuthenticated={true} logOut={logOut}>
-        <NavBar />
-      </AuthProvider>
-    )
   })
 
   it('renders login prompt when user is not authenticated', () => {

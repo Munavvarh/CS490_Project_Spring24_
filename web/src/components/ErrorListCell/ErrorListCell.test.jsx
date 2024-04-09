@@ -1,4 +1,5 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './ErrorListCell'
 import { standard } from './ErrorListCell.mock'
 
@@ -34,8 +35,13 @@ describe('ErrorListCell', () => {
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
-    expect(() => {
-      render(<Success errorList={standard().errorList} />)
-    }).not.toThrow()
+    const errors = standard().errors
+    render(<Success errors={errors} />)
+
+    errors.forEach((error) => {
+      expect(screen.getByText(error.status)).toBeInTheDocument()
+      expect(screen.getByText(error.title)).toBeInTheDocument()
+      expect(screen.getByText(error.description)).toBeInTheDocument()
+    })
   })
 })

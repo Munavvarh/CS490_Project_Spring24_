@@ -1,4 +1,5 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './ContactListCell'
 import { standard } from './ContactListCell.mock'
 
@@ -34,8 +35,11 @@ describe('ContactListCell', () => {
   // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
 
   it('renders Success successfully', async () => {
-    expect(() => {
-      render(<Success contactList={standard().contactList} />)
-    }).not.toThrow()
+    const contacts = standard().contacts
+    render(<Success contacts={contacts} />)
+
+    contacts.forEach((contact) => {
+      expect(screen.getByText(contact.subject)).toBeInTheDocument()
+    })
   })
 })
