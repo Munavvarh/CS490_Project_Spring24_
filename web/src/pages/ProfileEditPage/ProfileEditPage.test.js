@@ -3,66 +3,107 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
+import { MemoryRouter } from 'react-router-dom'
 import { navigate } from '@redwoodjs/router'
-import ProfileEditPage from './ProfileEditPage'
+import ProfileEditPage, {
+  GET_USER_NAME,
+  DELETE_USER,
+  UPDATE_USER_PROFILE,
+} from './ProfileEditPage'
+import { GraphQLHooksProvider } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+
+jest.mock('src/auth')
 
 describe('ProfileEditPage', () => {
-  it('renders user profile edit form', async () => {
-    // Mock user data
-    // const mockUser = {
-    //   id: 1,
-    //   name: 'Test User',
-    //   email: 'test@example.com',
-    // }
-    // render(
-    //   //   <MockedProvider>
-    //   <ProfileEditPage />
-    //   //   </MockedProvider>
-    // )
-    // // Ensure that the user's name and email are displayed
-    // expect(screen.getByText(mockUser.name)).toBeInTheDocument()
-    // expect(screen.getByText(mockUser.email)).toBeInTheDocument()
-    // // Ensure that the form inputs are rendered
-    // expect(screen.getByLabelText('Username')).toBeInTheDocument()
-    // expect(screen.getByLabelText('Email')).toBeInTheDocument()
-    // // Ensure that the delete account and save changes buttons are rendered
-    // expect(screen.getByText('Delete Account')).toBeInTheDocument()
-    // expect(screen.getByText('Save Changes')).toBeInTheDocument()
+  const currentUser = { id: 1, name: 'John Doe', email: 'john@example.com' }
+
+  beforeEach(() => {
+    useAuth.mockReturnValue({
+      isAuthenticated: true,
+      currentUser,
+      logOut: jest.fn(),
+    })
   })
 
-  //   it('calls handleDeleteUser and redirects to home page', async () => {
-  //     const mockUser = {
-  //       id: 1,
-  //       name: 'Test User',
-  //       email: 'test@example.com',
-  //     }
+  it('renders the profile edit page', async () => {
+    render(
+      <MockedProvider>
+        <MemoryRouter>
+          <GraphQLHooksProvider
+            useMutation={jest.fn().mockReturnValue([jest.fn(), {}])}
+            useQuery={jest.fn().mockReturnValue({ data: {} })}
+            useSubscription={jest.fn().mockReturnValue({ data: {} })}
+          >
+            <ProfileEditPage />
+          </GraphQLHooksProvider>
+        </MemoryRouter>
+      </MockedProvider>
+    )
 
-  //     // Mock deleteUserMutation
-  //     const deleteUserMutationMock = jest.fn()
+    // Assert that the profile edit page renders without crashing
+    expect(screen.getByText('Edit Profile')).toBeInTheDocument()
+    expect(screen.getByText('Signed in as:')).toBeInTheDocument()
+    expect(screen.getByText('Delete Account')).toBeInTheDocument()
+    expect(screen.getByText('Save Changes')).toBeInTheDocument()
+  })
 
-  //     // Mock useAuth
-  //     jest.mock('src/auth', () => ({
-  //       useAuth: () => ({
-  //         isAuthenticated: true,
-  //         currentUser: mockUser,
-  //         logOut: jest.fn(),
-  //       }),
-  //     }))
+  it('updates user profile', async () => {
+    const updatedName = 'Updated User'
+    const updatedEmail = 'updated@example.com'
 
-  //     render(
-  //       <MockedProvider>
-  //         <ProfileEditPage />
-  //       </MockedProvider>
-  //     )
+    const mocks = [
+      {
+        request: {
+          query: UPDATE_USER_PROFILE,
+          variables: {
+            id: 1,
+            input: {
+              name: updatedName,
+              email: updatedEmail,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateUser: {
+              id: 1,
+              name: updatedName,
+              email: updatedEmail,
+            },
+          },
+        },
+      },
+    ]
 
-  //     // Click delete account button
-  //     fireEvent.click(screen.getByText('Delete Account'))
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter>
+          <GraphQLHooksProvider
+            useMutation={jest.fn().mockReturnValue([jest.fn(), {}])}
+            useQuery={jest.fn().mockReturnValue({ data: {} })}
+            useSubscription={jest.fn().mockReturnValue({ data: {} })}
+          >
+            <ProfileEditPage />
+          </GraphQLHooksProvider>
+        </MemoryRouter>
+      </MockedProvider>
+    )
 
-  //     // Wait for deleteUserMutation to be called
-  //     await waitFor(() => expect(deleteUserMutationMock).toHaveBeenCalled())
+    await waitFor(() =>
+      expect(screen.getByLabelText('username')).toBeInTheDocument()
+    )
 
-  //     // Expect logOut and navigate to be called
-  //     expect(mockUser.logOut).toHaveBeenCalled()
-  //     expect(navigate).toHaveBeenCalledWith('/home')
-  //   })
+    fireEvent.change(screen.getByLabelText('username'), {
+      target: { value: updatedName },
+    })
+    fireEvent.change(screen.getByLabelText('email'), {
+      target: { value: updatedEmail },
+    })
+
+    fireEvent.click(screen.getByText('Save Changes'))
+
+    await waitFor(() => expect(navigate).toHaveBeenCalledWith('/home'))
+  })
 })
