@@ -1,7 +1,6 @@
-import { render, screen, fireEvent } from '@redwoodjs/testing/web'
-import { within } from '@testing-library/dom'
-import { Loading, Empty, Failure, Success } from './TranslationHistoriesCell'
-import { standard } from './TranslationHistoriesCell.mock'
+import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './ContactListCell'
+import { standard } from './ContactListCell.mock'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float and DateTime types.
@@ -9,7 +8,7 @@ import { standard } from './TranslationHistoriesCell.mock'
 //        https://redwoodjs.com/docs/testing#testing-cells
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
-describe('TranslationHistoriesCell', () => {
+describe('ContactListCell', () => {
   it('renders Loading successfully', () => {
     expect(() => {
       render(<Loading />)
@@ -36,11 +35,7 @@ describe('TranslationHistoriesCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success translationHistories={standard().translationHistories} />)
+      render(<Success contactList={standard().contactList} />)
     }).not.toThrow()
   })
-
 })
-
-
-

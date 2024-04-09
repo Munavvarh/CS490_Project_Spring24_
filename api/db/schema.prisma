@@ -27,6 +27,7 @@ model User {
   resetTokenExpiresAt  DateTime?
   translationHistories TranslationHistory[]
   Feedback             Feedback[]
+  Contact              Contact[]
 }
 
 model Feedback {
@@ -47,13 +48,14 @@ model Error {
   translationId Int                @unique
   title         String
   description   String
+  status        String
 }
 
 model TranslationHistory {
-  id                  Int     @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   userId              Int // Links to the User model's ID
-  originalCode        String   @db.Text
-  translatedCode      String   @db.Text
+  originalCode        String    @db.Text
+  translatedCode      String    @db.Text
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
   status              String // Could be an enum if you have predefined statuses
@@ -62,4 +64,15 @@ model TranslationHistory {
   user                User      @relation(fields: [userId], references: [id])
   Feedback            Feedback?
   Error               Error?
+}
+
+model Contact {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  userId       Int // Links to the User model's ID
+  user         User     @relation(fields: [userId], references: [id])
+  subject      String
+  message      String
+  wantResponse Boolean
+  sentResponse Boolean?
 }

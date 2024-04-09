@@ -9,6 +9,8 @@ export const QUERY = gql`
       translation {
         originalCode
         translatedCode
+        originalLanguage
+        translationLanguage
       }
       translationId
       review
