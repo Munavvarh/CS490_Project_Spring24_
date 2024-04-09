@@ -1,8 +1,10 @@
 // Import necessary dependencies from RedwoodJS
+import React, { useState } from 'react'
+
 import { Link, routes } from '@redwoodjs/router'
+
 //import { MetaTags } from '@redwoodjs/web'
-import { useAuth } from 'src/auth';
-import React, { useState } from 'react';
+import { useAuth } from 'src/auth'
 
 export const QUERY = gql`
   query FindTranslationHistoriesQuery {
@@ -26,37 +28,59 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>No translation histories found.</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error loading translation histories: {error.message}</div>
+  <div style={{ color: 'red' }}>
+    Error loading translation histories: {error.message}
+  </div>
 )
 
 export const Success = ({ translationHistories }) => {
-  const { currentUser } = useAuth(); // Use the useAuth hook to get the current user
-  const [sortColumn, setSortColumn] = useState('');
-  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' or 'desc'
+  const { currentUser } = useAuth() // Use the useAuth hook to get the current user
+  const [sortColumn, setSortColumn] = useState('')
+  const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
 
   const toggleSort = (column) => {
     if (sortColumn === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortColumn(column);
-      setSortDirection('asc');
+      setSortColumn(column)
+      setSortDirection('asc')
     }
-  };
+  }
 
-  const sortedTranslationHistories = [...translationHistories].sort((a, b) => {
-    if (!sortColumn) return 0;
-    let isReversed = sortDirection === 'asc' ? 1 : -1;
-    switch (sortColumn) {
-      case 'createdAt':
-      case 'updatedAt':
-        return isReversed * (new Date(a[sortColumn]) - new Date(b[sortColumn]));
-      case 'originalLanguage':
-      case 'translationLanguage':
-        return isReversed * a[sortColumn].localeCompare(b[sortColumn]);
-      default:
-        return 0;
-    }
-  }).filter(history => history.userId === currentUser?.id);
+  const sortedTranslationHistories = [...translationHistories]
+    .sort((a, b) => {
+      if (!sortColumn) return 0
+      let isReversed = sortDirection === 'asc' ? 1 : -1
+      switch (sortColumn) {
+        case 'createdAt':
+        case 'updatedAt':
+          return (
+            isReversed * (new Date(a[sortColumn]) - new Date(b[sortColumn]))
+          )
+        case 'originalLanguage':
+        case 'translationLanguage':
+          return isReversed * a[sortColumn].localeCompare(b[sortColumn])
+        default:
+          return 0
+      }
+    })
+    .filter((history) => history.userId === currentUser?.id)
+
+  const copyToClipboardOriginal = ({ history }) => {
+    navigator.clipboard.writeText(history.originalCode)
+    alert('Copied to clipboard!')
+    // toast('Copied to clipboard!', {
+    //   icon: '📋',
+    // })
+  }
+
+  const copyToClipboardTranslated = ({ history }) => {
+    navigator.clipboard.writeText(history.translatedCode)
+    alert('Copied to clipboard!')
+    // toast('Copied to clipboard!', {
+    //   icon: '📋',
+    // })
+  }
 
   const styles = {
     table: {
@@ -78,8 +102,15 @@ export const Success = ({ translationHistories }) => {
       verticalAlign: 'top',
       borderBottom: '1px solid #dee2e6',
       borderRight: '1px solid #dee2e6', // Vertical borders
-      textAlign: 'center', // Center align cell text
+      textAlign: 'center', // Center align header text
       padding: '8px', // Padding for spacing
+    },
+    tdCode: {
+      verticalAlign: 'top',
+      borderBottom: '1px solid #dee2e6',
+      borderRight: '1px solid #dee2e6', // Vertical borders
+      padding: '8px', // Padding for spacing
+      whiteSpace: 'pre-wrap',
     },
     link: {
       color: '#007bff', // Blue color for links
@@ -100,14 +131,15 @@ export const Success = ({ translationHistories }) => {
       fontWeight: '400',
       textAlign: 'center',
       userSelect: 'none',
-      transition: 'color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out',
+      transition:
+        'color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out',
     },
-  };
+  }
 
   // Ensure the last <th> and <td> in each row don't have a right border
   const lastChildStyle = {
     borderRight: 'none',
-  };
+  }
 
   return (
     <div className="rw-segment rw-table-wrapper-responsive">
@@ -116,39 +148,89 @@ export const Success = ({ translationHistories }) => {
           <tr>
             <th style={styles.th}>Original Code</th>
             <th style={styles.th}>Translated Code</th>
-            <th style={styles.th} onClick={() => toggleSort('createdAt')}>Translated On</th>
-            <th style={styles.th} onClick={() => toggleSort('updatedAt')}>Last Updated</th>
+            <th style={styles.th} onClick={() => toggleSort('createdAt')}>
+              Translated On
+            </th>
+            <th style={styles.th} onClick={() => toggleSort('updatedAt')}>
+              Last Updated
+            </th>
             <th style={styles.th}>Status</th>
-            <th style={styles.th} onClick={() => toggleSort('originalLanguage')}>Original Language</th>
-            <th style={styles.th} onClick={() => toggleSort('translationLanguage')}>Translation Language</th>
+            <th
+              style={styles.th}
+              onClick={() => toggleSort('originalLanguage')}
+            >
+              Original Language
+            </th>
+            <th
+              style={styles.th}
+              onClick={() => toggleSort('translationLanguage')}
+            >
+              Translation Language
+            </th>
             <th style={{ ...styles.th, ...lastChildStyle }}>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
-          {sortedTranslationHistories.length > 0 ? sortedTranslationHistories.map((history) => (
-            <tr key={history.id}>
-              <td style={styles.td}>{history.originalCode}</td>
-              <td style={styles.td}>{history.translatedCode}</td>
-              <td style={styles.td}>{new Date(history.createdAt).toLocaleDateString()}</td>
-              <td style={styles.td}>{new Date(history.updatedAt).toLocaleDateString()}</td>
-              <td style={styles.td}>{history.status}</td>
-              <td style={styles.td}>{history.originalLanguage}</td>
-              <td style={styles.td}>{history.translationLanguage}</td>
-              <td style={{ ...styles.td, ...lastChildStyle }}>
-                <nav className="rw-table-actions">
-                  <Link
-                    to={`${routes.translationOutput()}?originalCode=${encodeURIComponent(history.originalCode)}`}
-                    title={'Show translation history ' + history.id + ' detail'}
-                    style={styles.link}
-                  >
-                    <button style={styles.button}>Change</button>
-                  </Link>
-                </nav>
+          {sortedTranslationHistories.length > 0 ? (
+            sortedTranslationHistories.map((history) => (
+              <tr key={history.id}>
+                <td style={styles.tdCode}>
+                  {history.originalCode}
+                  <div className="bottom">
+                    <button
+                      onClick={() => copyToClipboardOriginal({ history })}
+                      className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2 w-full items-center justify-center rounded-md border-transparent bg-green-600 py-2  text-sm font-medium text-white shadow-sm hover:bg-green-700"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </td>
+                <td style={styles.tdCode}>
+                  {history.translatedCode}
+                  <div className="bottom">
+                    <button
+                      onClick={() => copyToClipboardTranslated({ history })}
+                      className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2 mt-4 w-full items-center justify-center rounded-md border-transparent bg-green-600 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </td>
+                <td style={styles.td}>
+                  {new Date(history.createdAt).toLocaleDateString()}
+                </td>
+                <td style={styles.td}>
+                  {new Date(history.updatedAt).toLocaleDateString()}
+                </td>
+                <td style={styles.td}>{history.status}</td>
+                <td style={styles.td}>{history.originalLanguage}</td>
+                <td style={styles.td}>{history.translationLanguage}</td>
+                <td style={{ ...styles.td, ...lastChildStyle }}>
+                  <nav className="rw-table-actions">
+                    <Link
+                      to={`${routes.translationOutput()}?originalCode=${encodeURIComponent(
+                        history.originalCode
+                      )}`}
+                      title={
+                        'Show translation history ' + history.id + ' detail'
+                      }
+                      style={styles.link}
+                    >
+                      <button style={styles.button}>Change</button>
+                    </Link>
+                  </nav>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">
+                No translation histories found.
               </td>
             </tr>
-          )) : <tr><td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">No translation histories found.</td></tr>}
+          )}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}

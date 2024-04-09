@@ -118,8 +118,11 @@ const TranslationOutputPage = () => {
       // toast.error(
       //   "Source and target languages can't be the same. Please select a different target language."
       // )
-      alert('Copied to clipboard!')
+      alert(
+        "Source and target languages can't be the same. Please select a different target language."
+      )
       setSendingTranslation(false)
+
       return
     }
 
