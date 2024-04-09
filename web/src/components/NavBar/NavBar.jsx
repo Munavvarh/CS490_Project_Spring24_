@@ -66,7 +66,7 @@ const NavBar = () => {
               // </div>
               <div>
                 <div className="flex-grow block w-full lg:flex lg:w-auto lg:items-center">
-                  <div className="lg:flex-grow text-sm">
+                  <div className="lg:flex-grow text-sm" id="navbar-dropdown">
                     <NavBarDropDown user={user} />
                   </div>
                 </div>

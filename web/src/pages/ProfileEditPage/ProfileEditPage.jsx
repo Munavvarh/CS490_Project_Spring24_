@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MainLayout from 'src/layouts/MainLayout/MainLayout'
 import { useQuery, useMutation } from '@redwoodjs/web'
 import { gql } from 'graphql-tag'
-import { useEffect, useState } from 'react'
 import { useAuth } from 'src/auth'
 import { navigate } from '@redwoodjs/router'
 
