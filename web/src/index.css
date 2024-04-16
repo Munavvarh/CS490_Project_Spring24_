@@ -182,3 +182,37 @@ label + .form-input {
 }
 
 
+/* FAQ trigger styles */
+.faq-trigger, .faq-trigger-opened {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq-trigger:hover, .faq-trigger-opened:hover {
+  background-color: #f3f3f3; /* subtle highlight */
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.faq-icon {
+  margin-left: 10px;
+}
+
+.faq-answer {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+

@@ -28,6 +28,8 @@ export const Primary = () => {
         translation: {
           originalCode: 'console.log("hello world");',
           translatedCode: 'print("hello world")',
+          originalLanguage: 'javascript',
+          translationLanguage: 'python',
         },
       }}
     />

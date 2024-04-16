@@ -1,9 +1,13 @@
 // Import necessary dependencies from RedwoodJS
+import React, { useState } from 'react'
+
 import { Link, routes } from '@redwoodjs/router'
+
 //import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from 'src/auth';
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client'
+
 
 export const QUERY = gql`
   query FindTranslationHistoriesQuery {
@@ -42,7 +46,9 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => <div>No translation histories found.</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error loading translation histories: {error.message}</div>
+  <div style={{ color: 'red' }}>
+    Error loading translation histories: {error.message}
+  </div>
 )
 
 export const Success = ({ translationHistories }) => {
@@ -56,14 +62,15 @@ export const Success = ({ translationHistories }) => {
     refetchQueries: [{ query: QUERY }],
   });
 
+
   const toggleSort = (column) => {
     if (sortColumn === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortColumn(column);
-      setSortDirection('asc');
+      setSortColumn(column)
+      setSortDirection('asc')
     }
-  };
+  }
 
   const handleDeleteHistory = (id) => {
     if (confirm('Are you sure you want to delete this translation history?')) {
@@ -112,8 +119,15 @@ export const Success = ({ translationHistories }) => {
       verticalAlign: 'top',
       borderBottom: '1px solid #dee2e6',
       borderRight: '1px solid #dee2e6', // Vertical borders
-      textAlign: 'center', // Center align cell text
+      textAlign: 'center', // Center align header text
       padding: '8px', // Padding for spacing
+    },
+    tdCode: {
+      verticalAlign: 'top',
+      borderBottom: '1px solid #dee2e6',
+      borderRight: '1px solid #dee2e6', // Vertical borders
+      padding: '8px', // Padding for spacing
+      whiteSpace: 'pre-wrap',
     },
     link: {
       color: '#007bff', // Blue color for links
@@ -136,14 +150,15 @@ export const Success = ({ translationHistories }) => {
       fontWeight: '400',
       textAlign: 'center',
       userSelect: 'none',
-      transition: 'color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out',
+      transition:
+        'color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out',
     },
-  };
+  }
 
   // Ensure the last <th> and <td> in each row don't have a right border
   const lastChildStyle = {
     borderRight: 'none',
-  };
+  }
 
   return (
     <div className="rw-segment rw-table-wrapper-responsive">
@@ -152,11 +167,25 @@ export const Success = ({ translationHistories }) => {
           <tr>
             <th style={styles.th}>Original Code</th>
             <th style={styles.th}>Translated Code</th>
-            <th style={styles.th} onClick={() => toggleSort('createdAt')}>Translated On</th>
-            <th style={styles.th} onClick={() => toggleSort('updatedAt')}>Last Updated</th>
+            <th style={styles.th} onClick={() => toggleSort('createdAt')}>
+              Translated On
+            </th>
+            <th style={styles.th} onClick={() => toggleSort('updatedAt')}>
+              Last Updated
+            </th>
             <th style={styles.th}>Status</th>
-            <th style={styles.th} onClick={() => toggleSort('originalLanguage')}>Original Language</th>
-            <th style={styles.th} onClick={() => toggleSort('translationLanguage')}>Translation Language</th>
+            <th
+              style={styles.th}
+              onClick={() => toggleSort('originalLanguage')}
+            >
+              Original Language
+            </th>
+            <th
+              style={styles.th}
+              onClick={() => toggleSort('translationLanguage')}
+            >
+              Translation Language
+            </th>
             <th style={{ ...styles.th, ...lastChildStyle }}>&nbsp;</th>
           </tr>
         </thead>
@@ -183,10 +212,10 @@ export const Success = ({ translationHistories }) => {
                 </div>
             </td>
             </tr>
-          )) : <tr><td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">No translation histories found.</td></tr>}
+          )}
         </tbody>
       </table>
       <button style={styles.button} onClick={handleClearAllHistories}>Clear All Histories</button>
     </div>
-  );
-};
+  )
+}
