@@ -33,7 +33,7 @@ describe('DocumentationPage', () => {
     // Assuming you have an array or object of links for easier management and verification
     const links = [
       { text: '- HomePage', href: '/home' },
-      { text: '- Feedback', href: '/Feedback' },
+      { text: '- Feedback', href: '/contact-us' },
       { text: '- Github', href: 'https://github.com/Munavvarh/CS490_Project_Spring24_' },
       // Add other links similarly
     ];

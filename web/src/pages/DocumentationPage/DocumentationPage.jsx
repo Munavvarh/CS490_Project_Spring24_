@@ -1,95 +1,141 @@
 import { MetaTags } from '@redwoodjs/web';
 import { useState } from 'react';
 import MainLayout from 'src/layouts/MainLayout/MainLayout';
+import Collapsible from 'react-collapsible';
+import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi'; // Make sure to install react-icons if it's not already
+import '../../index.css'; // Assuming you have a CSS file for additional styles
 
-// Example list of FAQs
+
+// Full list of FAQs with categories
+// ... (keep your FAQs array as it is)
+
 const faqs = [
   {
+    category: 'General',
     question: "How do I start translating code?",
     answer: "Access the Translator Tool via the navigation bar, select your source and target languages, paste your code, and click 'Submit'.",
   },
   {
+    category: 'Languages',
     question: "What languages does SyntaxSwitch support?",
-    answer: "SyntaxSwitch supports a wide range of programming languages, leveraging the GPT-3 API for seamless translation. Which curretnly includes Python,Java,Javascript For a future refrence full list, access the tool's language selection dropdown.",
+    answer: "SyntaxSwitch supports a wide range of programming languages, including Python, Java, JavaScript. For a full list, access the tool's language selection dropdown.",
   },
   {
+    category: 'API',
     question: "Can I check the API status?",
     answer: "Yes, the current status of the GPT-3 API can be checked directly from our 'API Status' button to ensure the translation service is online.",
   },
   {
+    category: 'Limitations',
     question: "Is there a limit to how much code I can translate at once?",
     answer: "There might be limitations based on the current API usage and server capacity. You will get an alert if applicable. Please refer to the API Status page for more information.",
   },
   {
+    category: 'Accuracy',
     question: "How accurate is the code translation?",
     answer: "The accuracy depends on the complexity of the code and the languages involved. SyntaxSwitch aims to provide highly accurate translations, but we recommend reviewing the translated code before use.",
   },
   {
+    category: 'Contribution',
     question: "Can I contribute to improving SyntaxSwitch?",
-    answer: "Absolutely! Feedback and contributions are welcome. You can use the Feedback link to share your thoughts or the feedback pop up that comes after every transaltion asking for review. Also, you can visit our GitHub repository.",
+    answer: "Absolutely! Feedback and contributions are welcome. You can use the Feedback link to share your thoughts or visit our GitHub repository.",
   },
   {
+    category: 'Account',
     question: "Do I need an account to use SyntaxSwitch?",
-    answer: "Yes, functionality is not available without an accoun. signing up enables access to advanced features and personalization options.",
+    answer: "Yes, functionality is not available without an account. Signing up enables access to advanced features and personalization options.",
   },
   {
+    category: 'Support',
     question: "How do I report a bug or request a new feature?",
     answer: "Use the Feedback link on our navigation bar to report bugs or suggest new features. Your input is invaluable in helping us improve SyntaxSwitch.",
   },
-  // Add more FAQs as needed
 ];
 
 const DocumentationPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('All');
 
   const filteredFaqs = faqs.filter(faq =>
-    faq.question.toLowerCase().includes(searchTerm.toLowerCase())
+    (faq.question.toLowerCase().includes(searchTerm.toLowerCase()) || faq.answer.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (filter === 'All' || faq.category === filter)
   );
 
   return (
     <MainLayout>
       <>
         <MetaTags title="Documentation" description="Documentation page for SyntaxSwitch" />
-
         <div className="max-w-full mx-auto p-6 shadow-lg rounded-lg mt-10">
-          <header className="mb-12 text-center">
+        <header className="mb-12 text-center">
             <h1 className="text-5xl font-bold mb-6">Documentation and Help Section</h1>
             <p className="text-lg mb-4">
               Welcome to the SyntaxSwitch Documentation! Here, you can find answers to frequently asked questions, user guides, and other helpful resources to enhance your experience with our code translation tool.
             </p>
           </header>
-          <hr className="border-2 border-black" /><br></br>
+          <hr className="border-2 border-black" /><br />
+          
           {/* Searchable FAQs Section */}
           <section className="mb-12">
             <h2 className="text-4xl font-semibold mb-6">Frequently Asked Questions (FAQs)</h2>
-            <input
-              type="text"
-              placeholder="Search FAQs"
-              className="form-input mb-6"
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <div>
+              <input
+                type="text"
+                placeholder="Search FAQs"
+                className="form-input mb-2"
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <select onChange={(e) => setFilter(e.target.value)} className="form-select mb-4">
+                <option value="All">All Categories</option>
+                <option value="General">General</option>
+                <option value="Languages">Languages</option>
+                <option value="API">API</option>
+                <option value="Limitations">Limitations</option>
+                <option value="Accuracy">Accuracy</option>
+                <option value="Contribution">Contribution</option>
+                <option value="Account">Account</option>
+                <option value="Support">Support</option>
+              </select>
+            </div>
             {filteredFaqs.length > 0 ? (
-              <ul className="list-disc pl-8 mb-6 space-y-4 text-lg">
+              <div className="space-y-4">
                 {filteredFaqs.map((faq, index) => (
-                  <li key={index}>
-                    <strong>{faq.question}</strong>
-                    <p>{faq.answer}</p>
-                  </li>
+                  <Collapsible
+                    key={index}
+                    trigger={
+                      <div className="faq-question">
+                        <span>{faq.question}</span>
+                        <FiPlusCircle className="faq-icon" />
+                      </div>
+                    }
+                    triggerWhenOpen={
+                      <div className="faq-question">
+                        <span>{faq.question}</span>
+                        <FiMinusCircle className="faq-icon" />
+                      </div>
+                    }
+                    transitionTime={200}
+                    triggerClassName="faq-trigger"
+                    triggerOpenedClassName="faq-trigger-opened"
+                    contentInnerClassName="faq-answer"
+                  >
+                    {faq.answer}
+                  </Collapsible>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p>No FAQs found matching your search criteria.</p>
             )}
           </section>
-          {/* User Guides Section */}
-          <section className="mb-12">
+          
+           {/* User Guides Section */}
+           <section className="mb-12">
           <hr className="border-2 border-black" /><br></br>
             <h2 className="text-4xl font-semibold mb-6 ">User Guides</h2>
             <hr className="border-2 border-black" /><br></br>
             <p className="mb-4 text-lg">Explore detailed guides on making the most out of SyntaxSwitch. For comprehensive guides, please:</p>
             <ul className="list-disc pl-8 space-y-2 text-lg">
               <li> For how to utilize SyntaxSwitch website visit the quickstart section on  <a href="/home" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'> - HomePage</a></li>
-              <li> Contact us for personalized assistance.<a href="/Feedback" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'> - Feedback</a></li>
+              <li> Contact us for personalized assistance.<a href="/contact-us" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'> - Feedback</a></li>
               <li>Visit our gitHub repository for more technical details and examples. <a href="https://github.com/Munavvarh/CS490_Project_Spring24_" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'>- Github</a></li>
               <li>Learn about our GPT API rate limits and error handling on the <a href="https://platform.openai.com/docs/guides/rate-limits/error-mitigation?context=tier-free" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:underline'>API Usage & Errors</a> page for detailed guidance and best practices.</li>
             </ul>
