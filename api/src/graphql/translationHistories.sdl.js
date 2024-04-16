@@ -46,6 +46,7 @@ export const schema = gql`
       input: UpdateTranslationHistoryInput!
     ): TranslationHistory! @requireAuth
     deleteTranslationHistory(id: Int!): TranslationHistory! @requireAuth
+    deleteAllTranslationHistoriesForUser(userId: Int!): [TranslationHistory!]! @requireAuth
   }
 
   input FeedbackInput { # Define FeedbackInput type
