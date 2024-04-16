@@ -3,6 +3,7 @@ import { Link, routes } from '@redwoodjs/router'
 //import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from 'src/auth';
 import React, { useState } from 'react';
+import { useMutation, gql } from '@apollo/client'
 
 export const QUERY = gql`
   query FindTranslationHistoriesQuery {
@@ -20,6 +21,21 @@ export const QUERY = gql`
     }
   }
 `
+const DELETE_HISTORY_MUTATION = gql`
+  mutation DeleteTranslationHistory($id: Int!) {
+    deleteTranslationHistory(id: $id) {
+      id
+    }
+  }
+`
+
+const DELETE_ALL_HISTORIES_MUTATION = gql`
+  mutation DeleteAllTranslationHistoriesForUser($userId: Int!) {
+    deleteAllTranslationHistoriesForUser(userId: $userId) {
+      id
+    }
+  }
+`
 
 export const Loading = () => <div>Loading...</div>
 
@@ -33,6 +49,12 @@ export const Success = ({ translationHistories }) => {
   const { currentUser } = useAuth(); // Use the useAuth hook to get the current user
   const [sortColumn, setSortColumn] = useState('');
   const [sortDirection, setSortDirection] = useState('asc'); // 'asc' or 'desc'
+  const [deleteHistory] = useMutation(DELETE_HISTORY_MUTATION, {
+    refetchQueries: [{ query: QUERY }],
+  });
+  const [deleteAllHistories] = useMutation(DELETE_ALL_HISTORIES_MUTATION, {
+    refetchQueries: [{ query: QUERY }],
+  });
 
   const toggleSort = (column) => {
     if (sortColumn === column) {
@@ -42,6 +64,18 @@ export const Success = ({ translationHistories }) => {
       setSortDirection('asc');
     }
   };
+
+  const handleDeleteHistory = (id) => {
+    if (confirm('Are you sure you want to delete this translation history?')) {
+      deleteHistory({ variables: { id } })
+    }
+  }
+
+  const handleClearAllHistories = () => {
+    if (confirm('Are you sure you want to delete all translation histories for this user?')) {
+      deleteAllHistories({ variables: { userId: currentUser?.id } })
+    }
+  }
 
   const sortedTranslationHistories = [...translationHistories].sort((a, b) => {
     if (!sortColumn) return 0;
@@ -85,12 +119,14 @@ export const Success = ({ translationHistories }) => {
       color: '#007bff', // Blue color for links
       textDecoration: 'none',
       backgroundColor: 'transparent',
+      marginRight: '0.001px',
     },
     button: {
       color: '#fff', // White text for buttons
       backgroundColor: '#007bff', // Blue background for buttons
       borderColor: '#007bff',
       padding: '.375rem .75rem',
+      margin: '0 10px',
       fontSize: '1rem',
       lineHeight: '1.5',
       borderRadius: '.25rem',
@@ -134,8 +170,8 @@ export const Success = ({ translationHistories }) => {
               <td style={styles.td}>{history.status}</td>
               <td style={styles.td}>{history.originalLanguage}</td>
               <td style={styles.td}>{history.translationLanguage}</td>
-              <td style={{ ...styles.td, ...lastChildStyle }}>
-                <nav className="rw-table-actions">
+              <td style={{ ...styles.td, ...styles.lastChildStyle }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <Link
                     to={`${routes.translationOutput()}?originalCode=${encodeURIComponent(history.originalCode)}`}
                     title={'Show translation history ' + history.id + ' detail'}
@@ -143,12 +179,14 @@ export const Success = ({ translationHistories }) => {
                   >
                     <button style={styles.button}>Change</button>
                   </Link>
-                </nav>
-              </td>
+                  <button style={styles.button} onClick={() => handleDeleteHistory(history.id)}>Delete</button>
+                </div>
+            </td>
             </tr>
           )) : <tr><td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">No translation histories found.</td></tr>}
         </tbody>
       </table>
+      <button style={styles.button} onClick={handleClearAllHistories}>Clear All Histories</button>
     </div>
   );
 };

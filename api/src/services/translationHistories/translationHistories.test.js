@@ -1,10 +1,10 @@
-// Import necessary functions and db from your service file
 import {
   translationHistories,
   translationHistory,
   createTranslationHistory,
   updateTranslationHistory,
   deleteTranslationHistory,
+  deleteAllTranslationHistoriesForUser, // Import the function for deleting all histories for a user
 } from './translationHistories'
 import { db } from 'src/lib/db'
 
@@ -41,6 +41,7 @@ describe('translationHistories', () => {
     await db.user.deleteMany()
   })
 
+
   it('returns all translationHistories', async () => {
     const result = await translationHistories()
     expect(result.length).toBeGreaterThan(0)
@@ -73,9 +74,53 @@ describe('translationHistories', () => {
     expect(result.originalCode).toEqual(updatedData.originalCode)
   })
 
-  it('deletes a translationHistory', async () => {
-    await deleteTranslationHistory({ id: scenarioData.translationHistory.id })
-    const result = await translationHistory({ id: scenarioData.translationHistory.id })
+  it('deletes a single translationHistory entry', async () => {
+    const history = await db.translationHistory.create({
+      data: {
+        userId: scenarioData.user.id,
+        originalCode: 'console.log("to delete")',
+        translatedCode: 'print("to delete")',
+        status: 'COMPLETED',
+        originalLanguage: 'JavaScript',
+        translationLanguage: 'Python',
+      },
+    })
+
+    await deleteTranslationHistory({ id: history.id })
+    const result = await translationHistory({ id: history.id })
     expect(result).toBeNull()
+  })
+
+  it('deletes all translationHistories for a user', async () => {
+    // Create additional translationHistories to setup the test
+    await db.translationHistory.createMany({
+      data: [
+        {
+          userId: scenarioData.user.id,
+          originalCode: 'console.log("hello 1")',
+          translatedCode: 'print("hello 1")',
+          status: 'COMPLETED',
+          originalLanguage: 'JavaScript',
+          translationLanguage: 'Python',
+        },
+        {
+          userId: scenarioData.user.id,
+          originalCode: 'console.log("hello 2")',
+          translatedCode: 'print("hello 2")',
+          status: 'COMPLETED',
+          originalLanguage: 'JavaScript',
+          translationLanguage: 'Python',
+        },
+      ],
+    })
+
+    // Delete all histories for the user
+    await deleteAllTranslationHistoriesForUser({ userId: scenarioData.user.id })
+
+    // Check the database to confirm deletion
+    const remainingHistories = await db.translationHistory.findMany({
+      where: { userId: scenarioData.user.id },
+    })
+    expect(remainingHistories.length).toBe(0)
   })
 })
