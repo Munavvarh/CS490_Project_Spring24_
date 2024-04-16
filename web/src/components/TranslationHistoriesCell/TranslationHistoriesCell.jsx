@@ -212,10 +212,11 @@ export const Success = ({ translationHistories }) => {
                 </div>
             </td>
             </tr>
-          )}
+          )) : <tr><td style={{ textAlign: 'center', padding: '20px' }} colSpan="8">No translation histories found.</td></tr>}
         </tbody>
       </table>
       <button style={styles.button} onClick={handleClearAllHistories}>Clear All Histories</button>
     </div>
-  )
-}
+  );
+};
+
