@@ -20663,6 +20663,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-collapsible@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "react-collapsible@npm:2.10.0"
+  peerDependencies:
+    react: ~15 || ~16 || ~17 || ~18
+    react-dom: ~15 || ~16 || ~17 || ~18
+  checksum: 10c0/ba6189a2784e5bbd26c964e309e24901367246bd33491af8b619e560f50657fc4cc847bdf3b28f2dd8bc35e0c3027a3adb907b0984c7093d4924a9779680af35
+  languageName: node
+  linkType: hard
+
 "react-colorful@npm:^5.1.2":
   version: 5.6.1
   resolution: "react-colorful@npm:5.6.1"
@@ -20765,6 +20775,15 @@ __metadata:
     react: ">=16"
     react-dom: ">=16"
   checksum: 10c0/591ecec3c6adc1cdb70f00165a57baa3d7f75d0d30fa767213c36496bdcc6be2b2e6a3edbf7c04f7d726a1b17dcfb5e7feb2136b04b17c9ccb769894b970f365
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "react-icons@npm:5.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/f01648bbf37854510a568c1ac4aeb1c23f734f2ff3a9e94d624bc039ff6291d83ea83281a1380e8105b3f1819bb359a6f34326a5cefbfbced1024b4b81493e01
   languageName: node
   linkType: hard
 
@@ -21579,6 +21598,8 @@ __metadata:
     lang-detector: "npm:^1.0.6"
     openai: "npm:^4.29.2"
     prettier-plugin-tailwindcss: "npm:0.4.1"
+    react-collapsible: "npm:^2.10.0"
+    react-icons: "npm:^5.1.0"
     react-router-dom: "npm:^6.22.2"
     sanitize-html: "npm:^2.13.0"
     supertest: "npm:^6.3.4"

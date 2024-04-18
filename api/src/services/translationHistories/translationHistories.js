@@ -41,3 +41,10 @@ export const deleteTranslationHistory = ({ id }) => {
     where: { id },
   })
 }
+
+export const deleteAllTranslationHistoriesForUser = ({ userId }) => {
+  return db.translationHistory.deleteMany({
+    where: { userId },
+  })
+}
+
