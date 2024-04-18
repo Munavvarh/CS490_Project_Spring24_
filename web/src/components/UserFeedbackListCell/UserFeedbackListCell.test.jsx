@@ -30,24 +30,52 @@ describe('UserFeedbackListCell', () => {
     }).not.toThrow()
   })
 
-  // When you're ready to test the actual output of your component render
-  // you could test that, for example, certain text is present:
-  //
-  // 1. import { screen } from '@redwoodjs/testing/web'
-  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
-  /*
-  it('renders Success successfully', async () => {
-    expect(() => {
-      render(<Success feedbacks={standard().feedbacks} />)
-    }).not.toThrow()
-  })
-*/
-  it('renders Success successfully', async () => {
+  it('renders nonminimal Success successfully', async () => {
     const feedbacks = standard().feedbacks
-    render(<Success feedbacks={feedbacks} />)
+    render(<Success feedbacks={feedbacks} minimal={false} />)
 
     feedbacks.forEach((feedback) => {
-      expect(screen.getByText(feedback.score)).toBeInTheDocument()
+      expect(screen.getByText(feedback.User.email)).toBeInTheDocument()
+      expect(
+        screen.getAllByText(feedback.translation.originalCode)[0]
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByText(feedback.translation.translatedCode)[0]
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByText(feedback.translation.originalLanguage)[0]
+      ).toBeInTheDocument()
+      expect(
+        screen.getAllByText(feedback.translation.translationLanguage)[0]
+      ).toBeInTheDocument()
+      expect(screen.getAllByText(feedback.score)[0]).toBeInTheDocument()
+      expect(screen.getAllByText(feedback.review)[0]).toBeInTheDocument()
+    })
+  })
+
+  it('renders minimal Success successfully', async () => {
+    const feedbacks = standard().feedbacks.slice(
+      standard().feedbacks.length - 5,
+      standard().feedbacks.length
+    )
+    render(<Success feedbacks={feedbacks} minimal={true} />)
+
+    feedbacks.forEach((feedback) => {
+      expect(() => screen.getByText(feedback.User.email)).toThrow()
+      expect(() =>
+        screen.getByText(feedback.translation.originalCode)
+      ).toThrow()
+      expect(() =>
+        screen.getByText(feedback.translation.translatedCode)
+      ).toThrow()
+      expect(() =>
+        screen.getByText(feedback.translation.originalLanguage)
+      ).toThrow()
+      expect(() =>
+        screen.getByText(feedback.translation.translationLanguage)
+      ).toThrow()
+      expect(screen.getAllByText(feedback.score)[0]).toBeInTheDocument()
+      expect(screen.getAllByText(feedback.review)[0]).toBeInTheDocument()
     })
   })
 })

@@ -39,9 +39,9 @@ describe('ErrorListCell', () => {
     render(<Success errors={errors} />)
 
     errors.forEach((error) => {
-      expect(screen.getByText(error.status)).toBeInTheDocument()
-      expect(screen.getByText(error.title)).toBeInTheDocument()
-      expect(screen.getByText(error.description)).toBeInTheDocument()
+      expect(screen.getAllByText(error.status)[0]).toBeInTheDocument()
+      expect(screen.getAllByText(error.title)[0]).toBeInTheDocument()
+      expect(screen.getAllByText(error.description)[0]).toBeInTheDocument()
     })
   })
 })

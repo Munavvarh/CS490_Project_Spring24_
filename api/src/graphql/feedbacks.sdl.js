@@ -11,8 +11,8 @@ export const schema = gql`
   }
 
   type Query {
-    feedbacks: [Feedback!]! @requireAuth
-    feedback(id: Int!): Feedback @requireAuth
+    feedbacks: [Feedback!]! @skipAuth
+    feedback(id: Int!): Feedback @skipAuth
   }
 
   input CreateFeedbackInput {
