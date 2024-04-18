@@ -72,7 +72,7 @@ const Error = ({ error }) => {
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black">
+              <td className="border whitespace-pre-wrap border-black">
                 <code>{error.translation.originalCode}</code>
               </td>
             </tr>

@@ -22,8 +22,6 @@ export const Primary = () => {
         createdAt: '2002-06-11T12:34:56Z',
         User: {
           email: 'user1@example.com',
-          hashedPassword: 'randomHashedPassword1',
-          salt: 'randomSalt1',
         },
         translation: {
           originalCode: 'console.log("hello world");',
@@ -32,6 +30,7 @@ export const Primary = () => {
           translationLanguage: 'python',
         },
       }}
+      minimal={false}
     />
   )
 }

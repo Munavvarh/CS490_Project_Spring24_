@@ -4,7 +4,7 @@ const formattedDate = (datetime) => {
   return `${parsedDate.getDate()} ${month} ${parsedDate.getFullYear()} ${parsedDate.getUTCHours()}:${parsedDate.getUTCMinutes()}:${parsedDate.getUTCSeconds()} UTC`
 }
 
-const UserFeedback = ({ feedback }) => {
+const UserFeedback = ({ feedback, minimal }) => {
   return (
     <div className="rounded-lg bg-blue-200 p-8">
       <div>
@@ -16,21 +16,28 @@ const UserFeedback = ({ feedback }) => {
             {formattedDate(feedback.createdAt)}
           </time>
         </header>
-        <p>
-          <b>Email:</b> {feedback.User.email}
-        </p>
+        <div className={minimal ? 'hidden' : ''}>
+          <b>Email:</b> {minimal ? '' : feedback.User.email}
+        </div>
         <p>
           <b>Review:</b> {feedback.review}
         </p>
-        <p>
-          <b>Original Language:</b> {feedback.translation.originalLanguage}
-        </p>
-        <p>
+        <div className={minimal ? 'hidden' : ''}>
+          <b>Original Language:</b>{' '}
+          {minimal ? '' : feedback.translation.originalLanguage}
+        </div>
+        <div className={minimal ? 'hidden' : ''}>
           <b>Translation Language:</b>{' '}
-          {feedback.translation.translationLanguage}
-        </p>
+          {minimal ? '' : feedback.translation.translationLanguage}
+        </div>
 
-        <table className="w-fit table-fixed border-collapse grid-cols-2 grid-rows-2">
+        <table
+          className={
+            minimal
+              ? 'hidden'
+              : 'w-fit table-fixed border-collapse grid-cols-2 grid-rows-2'
+          }
+        >
           <thead>
             <tr>
               <th className="border bg-opacity-20 border-black bg-blue-900 text-left">
@@ -43,11 +50,13 @@ const UserFeedback = ({ feedback }) => {
           </thead>
           <tbody>
             <tr>
-              <td className="border border-black align-text-top">
-                <code>{feedback.translation.originalCode}</code>
+              <td className="border whitespace-pre-wrap border-black align-text-top">
+                <code>{minimal ? '' : feedback.translation.originalCode}</code>
               </td>
-              <td className="border border-black align-text-top">
-                <code>{feedback.translation.translatedCode}</code>
+              <td className="border whitespace-pre-wrap border-black align-text-top">
+                <code>
+                  {minimal ? '' : feedback.translation.translatedCode}
+                </code>
               </td>
             </tr>
           </tbody>

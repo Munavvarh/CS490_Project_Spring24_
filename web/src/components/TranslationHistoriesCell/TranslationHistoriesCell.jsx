@@ -111,6 +111,7 @@ export const Success = ({ translationHistories }) => {
       borderRight: '1px solid #dee2e6', // Vertical borders
       padding: '8px', // Padding for spacing
       whiteSpace: 'pre-wrap',
+      position: 'relative',
     },
     link: {
       color: '#007bff', // Blue color for links
@@ -133,6 +134,11 @@ export const Success = ({ translationHistories }) => {
       userSelect: 'none',
       transition:
         'color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out',
+    },
+    copyButton: {
+      position: 'absolute',
+      bottom: '0',
+      right: '0',
     },
   }
 
@@ -176,25 +182,31 @@ export const Success = ({ translationHistories }) => {
               <tr key={history.id}>
                 <td style={styles.tdCode}>
                   {history.originalCode}
-                  <div className="bottom">
-                    <button
-                      onClick={() => copyToClipboardOriginal({ history })}
-                      className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2 w-full items-center justify-center rounded-md border-transparent bg-green-600 py-2  text-sm font-medium text-white shadow-sm hover:bg-green-700"
-                    >
-                      Copy
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => copyToClipboardOriginal({ history })}
+                    className={
+                      history.originalCode
+                        ? 'opacity-40 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mb-2 mr-2 mt-2 items-center justify-center rounded-md border-transparent bg-green-600 px-2 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700'
+                        : 'hidden'
+                    }
+                    style={styles.copyButton}
+                  >
+                    📋
+                  </button>
                 </td>
                 <td style={styles.tdCode}>
                   {history.translatedCode}
-                  <div className="bottom">
-                    <button
-                      onClick={() => copyToClipboardTranslated({ history })}
-                      className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2 mt-4 w-full items-center justify-center rounded-md border-transparent bg-green-600 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
-                    >
-                      Copy
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => copyToClipboardTranslated({ history })}
+                    className={
+                      history.translatedCode
+                        ? 'opacity-40 border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mb-2 mr-2 mt-2 items-center justify-center rounded-md border-transparent bg-green-600 px-2  py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700'
+                        : 'hidden'
+                    }
+                    style={styles.copyButton}
+                  >
+                    📋
+                  </button>
                 </td>
                 <td style={styles.td}>
                   {new Date(history.createdAt).toLocaleDateString()}

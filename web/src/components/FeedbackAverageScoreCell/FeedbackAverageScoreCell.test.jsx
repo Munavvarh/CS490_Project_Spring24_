@@ -50,7 +50,7 @@ describe('FeedbackAverageScoreCell', () => {
     }
     var avg = valueAdded / i
 
-    expect(screen.getByText(avg)).toBeInTheDocument()
+    expect(screen.getByText(avg.toFixed(4))).toBeInTheDocument()
   })
 })
 

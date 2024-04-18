@@ -45,7 +45,7 @@ export const Success = ({ feedbacks }) => {
 
   return (
     <div className="w-fit rounded-lg bg-blue-300 p-4 text-3xl font-semibold">
-      {avg}
+      {avg.toFixed(4)}
     </div>
   )
 }
