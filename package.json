@@ -47,7 +47,7 @@
     "tailwindcss": "^1"
   },
   "scripts": {
-    "postinstall": "yarn rw build",
+    "build": "yarn rw build ",
     "start": "node server.js",
     "migrate": "yarn rw prisma migrate deploy"
   }
