@@ -46,8 +46,10 @@
     "tailwindcss": "^1"
   },
   "scripts": {
+    "build": "yarn rw build",
     "start": "node server.js",
     "dev": "concurrently \"yarn rw dev api\" \"yarn rw dev web\" \"yarn start\""
-  }
+}
+
 
 }
