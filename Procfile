@@ -1,2 +1,2 @@
-release: yarn redwood prisma db push
-web: node server.js
+web: yarn redwood serve api
+worker: node server.js
