@@ -1,3 +1,4 @@
+const path = require('path');
 const detectLang = require('lang-detector');
 const express = require('express');
 const cors = require('cors');
