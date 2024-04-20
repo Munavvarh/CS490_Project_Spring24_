@@ -22,6 +22,9 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'web', 'src')));
+
 // Mock function to simulate a successful API request
 const mockSuccessRequest = async () => {
   return { status: 'success', data: 'Mock data' };
@@ -117,6 +120,11 @@ app.post('/translate-code', async (req, res) => {
       res.status(500).json({ success: false, error: "Failed to reach the OpenAI service. Please try again." });
     }
   }
+});
+
+// Catch-all route to serve index.html for all routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web', 'src', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3001;
