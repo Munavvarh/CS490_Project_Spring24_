@@ -1,2 +1,3 @@
-release: yarn rw prisma migrate deploy
-web: node server.js
+release: yarn redwood prisma migrate deploy
+web: yarn redwood serve api
+worker: node server.js
