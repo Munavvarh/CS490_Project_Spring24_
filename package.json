@@ -28,6 +28,7 @@
   "packageManager": "yarn@4.1.0",
   "dependencies": {
     "@prisma/client": "^5.11.0",
+    "@redwoodjs/cli": "^7.4.2",
     "@redwoodjs/web": "7.4.1",
     "axios": "^1.6.8",
     "concurrently": "^8.2.2",
@@ -48,7 +49,5 @@
   "scripts": {
     "build": "yarn rw build",
     "start": "node server.js"
-}
-
-
+  }
 }
