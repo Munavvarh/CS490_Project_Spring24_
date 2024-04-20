@@ -134,12 +134,12 @@ const TranslationOutputPage = () => {
     const transformedCode = sanitizedCode // e.g., yourTransformationFunction(sanitizedCode);
 
     //error checking
-    if (!currentUser) {
-      // toast.error('Please log in to translate and save your code.')
-      alert('Please log in to translate and save your code.')
-      setSendingTranslation(false)
-      return
-    }
+    // if (!currentUser) {
+    //   // toast.error('Please log in to translate and save your code.')
+    //   alert('Please log in to translate and save your code.')
+    //   setSendingTranslation(false)
+    //   return
+    // }
 
     if (!inputCode.trim()) {
       // toast.error('Please enter the code to translate.')

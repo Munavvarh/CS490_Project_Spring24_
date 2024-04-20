@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const OpenAI = require('openai');
+const session = require('express-session'); // Add this line
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
+
+// Trust the first proxy in front of you, this is important in Heroku environment
+app.set('trust proxy', 1); // trust first proxy
 
 // Rate limiting to prevent abuse
 const limiter = rateLimit({
@@ -26,6 +30,16 @@ app.use(limiter);
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'web', 'dist')));
 
+// Session management
+app.use(session({
+  secret: process.env.SESSION_SECRET, // Set this in Heroku's Config Vars
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: true, // to ensure cookies are only used over HTTPS
+    httpOnly: true // to ensure cookies are sent only to the server and not accessible via client-side JS
+  }
+}));
 
 // Mock function to simulate a successful API request
 const mockSuccessRequest = async () => {
@@ -133,4 +147,3 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app, preprocessCode, mockSuccessRequest, mockFailedRequest };
-
