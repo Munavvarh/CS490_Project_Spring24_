@@ -30,6 +30,7 @@
     "@prisma/client": "^5.11.0",
     "@redwoodjs/web": "7.4.1",
     "axios": "^1.6.8",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
@@ -43,5 +44,10 @@
     "sanitize-html": "^2.13.0",
     "supertest": "^6.3.4",
     "tailwindcss": "^1"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"yarn rw dev api\" \"yarn rw dev web\" \"yarn start\""
   }
+
 }
