@@ -1,1 +1,2 @@
-web: node server.js
+release: yarn migrate 
+web: yarn start  
