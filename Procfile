@@ -1,3 +1,3 @@
 release: yarn migrate  
-web: yarn rw serve     
+web: node server.js    
 
