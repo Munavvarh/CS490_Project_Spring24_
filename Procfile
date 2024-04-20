@@ -1,2 +1,1 @@
-web: yarn redwood serve api
-worker: node server.js
+web: node server.js
