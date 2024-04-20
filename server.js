@@ -24,7 +24,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'web', 'src')));
+app.use(express.static(path.join(__dirname, 'web', 'dist')));
+
 
 // Mock function to simulate a successful API request
 const mockSuccessRequest = async () => {
@@ -125,7 +126,7 @@ app.post('/translate-code', async (req, res) => {
 
 // Catch-all route to serve index.html for all routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'web', 'src', 'index.html'));
+  res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3001;
