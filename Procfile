@@ -1,2 +1,3 @@
-release: yarn migrate 
-web: yarn start  
+release: yarn migrate  
+web: yarn rw serve     
+
