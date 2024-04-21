@@ -48,8 +48,9 @@
     "tailwindcss": "^1"
   },
   "scripts": {
-    "build": "yarn rw build ",
-    "start": "node server.js",
-    "migrate": "yarn rw prisma migrate deploy"
+    "dev": "redwood dev", 
+    "start": "redwood serve web", 
+    "build": "redwood build" 
   }
+  
 }
