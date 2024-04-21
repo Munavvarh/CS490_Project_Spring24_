@@ -49,7 +49,7 @@
   },
   "scripts": {
     "dev": "redwood dev", 
-    "start": "redwood serve web", 
+    "start": "node server.js", 
     "build": "redwood build" 
   }
   
