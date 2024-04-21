@@ -49,6 +49,6 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "concurrently \"yarn rw dev api\" \"yarn rw dev web\" \"yarn start\""
+    "build": "yarn rw build"
   }
 }
