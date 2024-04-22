@@ -7,9 +7,9 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/cli-storybook": "7.4.1",
-    "@redwoodjs/core": "7.4.1",
-    "@redwoodjs/project-config": "7.4.1",
+    "@redwoodjs/cli-storybook": "7.4.2",
+    "@redwoodjs/core": "7.4.2",
+    "@redwoodjs/project-config": "7.4.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
@@ -28,7 +28,7 @@
   "packageManager": "yarn@4.1.0",
   "dependencies": {
     "@prisma/client": "^5.11.0",
-    "@redwoodjs/web": "7.4.1",
+    "@redwoodjs/web": "7.4.2",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -37,6 +37,7 @@
     "helmet": "^7.1.0",
     "lang-detector": "^1.0.6",
     "openai": "^4.29.2",
+    "react-ace": "^11.0.1",
     "react-collapsible": "^2.10.0",
     "react-icons": "^5.1.0",
     "react-router-dom": "^6.22.2",

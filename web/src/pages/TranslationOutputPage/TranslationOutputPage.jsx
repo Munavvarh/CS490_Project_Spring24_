@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 
+import Editor from '@monaco-editor/react'
 import detectLang from 'lang-detector' // Importing lang-detector
 import sanitizeHtml from 'sanitize-html' // HTML sanitization library
 
@@ -94,10 +95,10 @@ const TranslationOutputPage = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(outputCode)
-    alert('Copied to clipboard!')
-    // toast('Copied to clipboard!', {
-    //   icon: '📋',
-    // })
+    // alert('Copied to clipboard!')
+    toast('Copied to clipboard!', {
+      icon: '📋',
+    })
   }
 
   const downloadFile = () => {
@@ -115,12 +116,12 @@ const TranslationOutputPage = () => {
     // Slide 1 & Slide 2: Addressing user authentication and input validation align with API usage prerequisites.
 
     if (sourceLang.toLowerCase() === targetLang.toLowerCase()) {
-      // toast.error(
-      //   "Source and target languages can't be the same. Please select a different target language."
-      // )
-      alert(
+      toast.error(
         "Source and target languages can't be the same. Please select a different target language."
       )
+      // alert(
+      //   "Source and target languages can't be the same. Please select a different target language."
+      // )
       setSendingTranslation(false)
 
       return
@@ -135,15 +136,15 @@ const TranslationOutputPage = () => {
 
     //error checking
     if (!currentUser) {
-      // toast.error('Please log in to translate and save your code.')
-      alert('Please log in to translate and save your code.')
+      toast.error('Please log in to translate and save your code.')
+      // alert('Please log in to translate and save your code.')
       setSendingTranslation(false)
       return
     }
 
     if (!inputCode.trim()) {
-      // toast.error('Please enter the code to translate.')
-      alert('Please enter the code to translate.')
+      toast.error('Please enter the code to translate.')
+      // alert('Please enter the code to translate.')
       setSendingTranslation(false)
       return
     }
@@ -166,8 +167,8 @@ const TranslationOutputPage = () => {
       if (!response.ok) {
         // Directly display the backend-provided error message if the response is not OK
         console.error('Backend error:', data.error)
-        // toast.error(data.error || 'An error occurred. Please try again.')
-        alert(data.error || 'An error occurred. Please try again.')
+        toast.error(data.error || 'An error occurred. Please try again.')
+        // alert(data.error || 'An error occurred. Please try again.')
         setShowFeedback(false)
         const { data: translationData } = await createTranslationHistory({
           variables: {
@@ -207,14 +208,14 @@ const TranslationOutputPage = () => {
               },
             },
           })
-          // toast.success('Translation saved successfully!')
-          alert('Translation saved successfully!')
+          toast.success('Translation saved successfully!')
+          // alert('Translation saved successfully!')
           setTranslationId(translationData.createTranslationHistory.id) // Update translation ID state
           setShowFeedback(true) // Show feedback form or confirmation
         } else {
           // Handle cases where the backend indicates failure through the 'success' flag
-          // toast.error(data.error || 'Translation failed. Please try again.')
-          alert(data.error || 'Translation failed. Please try again.')
+          toast.error(data.error || 'Translation failed. Please try again.')
+          // alert(data.error || 'Translation failed. Please try again.')
           setShowFeedback(false)
           const { data: translationData } = await createTranslationHistory({
             variables: {
@@ -242,8 +243,8 @@ const TranslationOutputPage = () => {
       }
     } catch (error) {
       console.error('Fetch error:', error)
-      alert('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
-      // toast.error('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
+      // alert('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
+      toast.error('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
       setShowFeedback(false)
       const { data: translationData } = await createTranslationHistory({
         variables: {
@@ -287,11 +288,43 @@ const TranslationOutputPage = () => {
               id="inputCode"
               rows="15"
               cols="30"
-              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="numbered form-textarea mt-1 block w-full rounded-md border-gray-300 font-mono shadow-sm"
               placeholder="Enter your code..."
               value={inputCode}
               onChange={(e) => setInputCode(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Tab') {
+                  e.preventDefault()
+                  const { selectionStart, selectionEnd, value } = e.target
+                  // Insert tab character into inputCode value at the cursor position
+                  setInputCode(
+                    value.substring(0, selectionStart) +
+                      '\t' +
+                      value.substring(selectionEnd)
+                  )
+                  // Move the cursor position forward by one tab space
+                  e.target.selectionStart = e.target.selectionEnd =
+                    selectionStart + 1
+                }
+              }}
             ></textarea>
+
+            {/* <Editor
+              id="inputCode"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="Enter your code..."
+              value={inputCode}
+              onChange={setInputCode}
+              theme="vs-light"
+              language={sourceLang}
+              height="300px"
+              options={{
+                minimap: {
+                  enabled: false, // Disable minimap if needed
+                },
+                scrollBeyondLastLine: false,
+              }}
+            /> */}
           </div>
 
           {/* Additional form fields and UI components as needed */}
@@ -358,11 +391,27 @@ const TranslationOutputPage = () => {
               id="outputCode"
               rows="15"
               cols="30"
-              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 font-mono shadow-sm"
               placeholder="Translated code will appear here..."
               value={outputCode}
               disabled
             ></textarea>
+            {/* <Editor
+              id="outputCode"
+              height="300px"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="Translated code will appear here..."
+              value={outputCode}
+              language={targetLang}
+              options={{
+                readOnly: true,
+                domReadOnly: true,
+                minimap: {
+                  enabled: false, // Disable minimap if needed
+                },
+                scrollBeyondLastLine: false,
+              }}
+            /> */}
             <div className="mt-4 flex">
               <button
                 onClick={copyToClipboard}
