@@ -82,7 +82,7 @@ describe('TranslationOutputPage', () => {
     )
     const inputCode = screen.getByLabelText(/Enter your code:/i)
     const sourceLangSelect = screen.getByLabelText('Language of your code:')
-    const targetLangSelect = screen.getByLabelText('Translation Language:')
+    const targetLangSelect = screen.getByLabelText('Translation language:')
 
     await userEvent.type(inputCode, 'console.log("Hello, World!");')
     fireEvent.change(sourceLangSelect, { target: { value: 'javascript' } })
