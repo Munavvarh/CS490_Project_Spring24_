@@ -6,6 +6,7 @@ import sanitizeHtml from 'sanitize-html' // HTML sanitization library
 
 import { useLocation } from '@redwoodjs/router'
 import { Link, routes } from '@redwoodjs/router'
+import { Metadata } from '@redwoodjs/web'
 import { useMutation, gql } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
@@ -274,6 +275,7 @@ const TranslationOutputPage = () => {
 
   return (
     <>
+      <Metadata title="Translator" description="Translator Page" />
       <Toaster />
       <MainLayout>
         <div className="min-h-screen p-10">

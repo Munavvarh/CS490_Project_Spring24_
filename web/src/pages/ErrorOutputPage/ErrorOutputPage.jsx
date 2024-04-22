@@ -8,11 +8,11 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout'
 const ErrorOutputPage = () => {
   return (
     <>
-      <Metadata title="ErrorOutput" description="ErrorOutput page" />
+      <Metadata title="Error Output" description="ErrorOutput page" />
       <Toaster />
       <MainLayout>
         <Link
-          to="/admin-navigate"
+          to={routes.adminNavigate()}
           className="rounded transition ease-in-out; px-4 py-2 text-lg font-bold text-indigo-600 duration-300 hover:text-indigo-900"
         >
           Back to admin navigation
