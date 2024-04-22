@@ -136,6 +136,7 @@ const ProfileEditPage = () => {
                   </label>
                   <input
                     type="text"
+                    id="username"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.name}
                     onChange={(e) => setName(e.target.value)}
@@ -150,7 +151,7 @@ const ProfileEditPage = () => {
                     Email
                   </label>
                   <input
-                    id="profession"
+                    id="email"
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.email}
