@@ -3,10 +3,18 @@ import { sleep } from 'k6'
 
 export const options = {
   vus: 10,
-  iteration: 40,
+  duration: '30s',
+  ext: {
+    loadimpact: {
+      // Project: CS490 Project
+      projectID: 3692932,
+      // Test runs with the same name groups test runs together.
+      name: 'Test BMT',
+    },
+  },
 }
 
 export default function () {
-  http.get('http://localhost:8910/home')
+  http.get('https://test.k6.io')
   sleep(1)
 }
