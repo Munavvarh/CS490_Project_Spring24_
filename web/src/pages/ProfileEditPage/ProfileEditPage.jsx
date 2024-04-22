@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import MainLayout from 'src/layouts/MainLayout/MainLayout'
-import { useQuery, useMutation } from '@redwoodjs/web'
+
 import { gql } from 'graphql-tag'
-import { useAuth } from 'src/auth'
+
 import { navigate } from '@redwoodjs/router'
+import { Metadata } from '@redwoodjs/web'
+import { useQuery, useMutation } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+import MainLayout from 'src/layouts/MainLayout/MainLayout'
 
 const GET_USER_NAME = gql`
   query GetUserName($userId: Int!) {
@@ -75,11 +79,12 @@ const ProfileEditPage = () => {
 
   return (
     <MainLayout>
+      <Metadata title="Edit Profile" description="Edit Profile Page" />
       <main className="rw-main mx-auto flex min-h-screen w-full flex-col items-center justify-center px-6 py-1 py-8 md:h-screen md:w-2/3 lg:py-0">
         <div className="p-2 md:p-4">
           <div className="rw-main mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
             <img
-              src="/logo.png"
+              src="/logo-bg.png"
               alt="Syntax Switch Logo"
               className="logo-image "
             />
@@ -96,9 +101,9 @@ const ProfileEditPage = () => {
                     fill="currentColor"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </div>
@@ -124,13 +129,14 @@ const ProfileEditPage = () => {
                 {/* username field */}
                 <div className="mb-2 sm:mb-6">
                   <label
-                    for="username"
+                    htmlFor="username"
                     className="mb-2 block text-sm font-medium text-indigo-900"
                   >
                     Username
                   </label>
                   <input
                     type="text"
+                    id="username"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.name}
                     onChange={(e) => setName(e.target.value)}
@@ -139,13 +145,13 @@ const ProfileEditPage = () => {
                 {/* email */}
                 <div className="mb-2 sm:mb-6">
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="mb-2 block text-sm font-medium text-indigo-900"
                   >
                     Email
                   </label>
                   <input
-                    id="profession"
+                    id="email"
                     type="text"
                     className="bg-indigo-50 border focus:ring-indigo-500 p-2.5 block w-full rounded-lg border-indigo-300 text-sm text-indigo-900 focus:border-indigo-500"
                     placeholder={user.email}

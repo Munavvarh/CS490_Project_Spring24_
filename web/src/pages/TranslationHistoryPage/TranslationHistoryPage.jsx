@@ -1,4 +1,5 @@
 import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { Toaster } from '@redwoodjs/web/toast'
 
 import TranslationHistoriesCell from 'src/components/TranslationHistoriesCell'
@@ -6,6 +7,10 @@ import TranslationHistoriesCell from 'src/components/TranslationHistoriesCell'
 const TranslationHistoryPage = () => {
   return (
     <>
+      <Metadata
+        title="Translation History"
+        description="Translation History Page"
+      />
       <Toaster />
       <div className="rw-scaffold">
         <MetaTags

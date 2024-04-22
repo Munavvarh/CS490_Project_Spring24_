@@ -45,6 +45,16 @@ export const Success = ({ feedbacks, minimal, length = feedbacks.length }) => {
   const [targetLang, setTargetLang] = useState('') // Keep synchronized with your default or dynamic values
   const st = feedbacks.length > length ? feedbacks.length - length : 0
 
+  const languageOptionsUpper = [
+    'Python',
+    'Java',
+    'Javascript',
+    'C++',
+    'Ruby',
+    'Go',
+  ]
+  const languageOptions = ['python', 'java', 'javascript', 'c++', 'ruby', 'go']
+
   const filteredFB = feedbacks.filter(
     (fb) =>
       (sourceLang == '' ||
@@ -97,9 +107,11 @@ export const Success = ({ feedbacks, minimal, length = feedbacks.length }) => {
               onChange={(e) => setSourceLang(e.target.value)}
             >
               <option value="">Filter By Source Language</option>
-              <option value="java">java</option>
-              <option value="python">python</option>
-              <option value="javascript">javascript</option>
+              {languageOptionsUpper.map((langOp) => (
+                <option key={langOp} value={langOp.toLowerCase()}>
+                  {langOp}
+                </option>
+              ))}
             </select>
             <select
               id="targetLang"
@@ -108,9 +120,11 @@ export const Success = ({ feedbacks, minimal, length = feedbacks.length }) => {
               onChange={(e) => setTargetLang(e.target.value)}
             >
               <option value="">Filter By Target Language</option>
-              <option value="java">java</option>
-              <option value="python">python</option>
-              <option value="javascript">javascript</option>
+              {languageOptionsUpper.map((langOp) => (
+                <option key={langOp} value={langOp.toLowerCase()}>
+                  {langOp}
+                </option>
+              ))}
             </select>
             <select
               id="scoreSearch"

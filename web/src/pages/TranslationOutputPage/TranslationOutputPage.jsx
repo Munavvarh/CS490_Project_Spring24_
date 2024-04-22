@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 
+import Editor from '@monaco-editor/react'
 import detectLang from 'lang-detector' // Importing lang-detector
 import sanitizeHtml from 'sanitize-html' // HTML sanitization library
 
 import { useLocation } from '@redwoodjs/router'
 import { Link, routes } from '@redwoodjs/router'
+import { Metadata } from '@redwoodjs/web'
 import { useMutation, gql } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
@@ -25,6 +27,16 @@ const sanitizationOptions = {
   },
   preserveLineBreaks: true, // Preserve line breaks to maintain code formatting
 }
+
+const languageOptionsUpper = [
+  'Python',
+  'Java',
+  'Javascript',
+  'C++',
+  'Ruby',
+  'Go',
+]
+const languageOptions = ['python', 'java', 'javascript', 'c++', 'ruby', 'go']
 
 export const sanitizeInput = (inputCode) => {
   // Apply the textFilter directly as your sanitization step
@@ -77,8 +89,8 @@ const TranslationOutputPage = () => {
   useEffect(() => {
     if (inputCode) {
       // Using lang-detector for language detection
-      const detectedLanguage = detectLang(inputCode).toLowerCase()
-      if (['python', 'java', 'javascript'].includes(detectedLanguage)) {
+      const detectedLanguage = detectLang(inputCode)
+      if (languageOptions.includes(detectedLanguage.toLowerCase())) {
         setSourceLang(detectedLanguage) // Set to detected language if it's supported
       } else {
         setSourceLang('unknown') // Set to 'unknown' for unsupported languages
@@ -94,10 +106,10 @@ const TranslationOutputPage = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(outputCode)
-    alert('Copied to clipboard!')
-    // toast('Copied to clipboard!', {
-    //   icon: '📋',
-    // })
+    // alert('Copied to clipboard!')
+    toast('Copied to clipboard!', {
+      icon: '📋',
+    })
   }
 
   const downloadFile = () => {
@@ -110,17 +122,37 @@ const TranslationOutputPage = () => {
     document.body.removeChild(element)
   }
 
+  function extractCode(translatedCode) {
+    // Check if the code contains the pattern: ```[languageName]
+    const startPattern = '```' + { targetLang }
+    const endPattern = '```'
+
+    const startIndex = translatedCode.indexOf(startPattern)
+    const endIndex = translatedCode.lastIndexOf(endPattern)
+
+    if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+      // Extract the code part between the start and end patterns
+      const code = translatedCode
+        .substring(startIndex + startPattern.length, endIndex)
+        .trim()
+      return code
+    } else {
+      // If no pattern found, return the entire string as code (assuming it's just code)
+      return translatedCode.trim()
+    }
+  }
+
   const handleTranslateClick = async () => {
     setSendingTranslation(true)
     // Slide 1 & Slide 2: Addressing user authentication and input validation align with API usage prerequisites.
 
     if (sourceLang.toLowerCase() === targetLang.toLowerCase()) {
-      // toast.error(
-      //   "Source and target languages can't be the same. Please select a different target language."
-      // )
-      alert(
+      toast.error(
         "Source and target languages can't be the same. Please select a different target language."
       )
+      // alert(
+      //   "Source and target languages can't be the same. Please select a different target language."
+      // )
       setSendingTranslation(false)
 
       return
@@ -135,15 +167,15 @@ const TranslationOutputPage = () => {
 
     //error checking
     if (!currentUser) {
-      // toast.error('Please log in to translate and save your code.')
-      alert('Please log in to translate and save your code.')
+      toast.error('Please log in to translate and save your code.')
+      // alert('Please log in to translate and save your code.')
       setSendingTranslation(false)
       return
     }
 
     if (!inputCode.trim()) {
-      // toast.error('Please enter the code to translate.')
-      alert('Please enter the code to translate.')
+      toast.error('Please enter the code to translate.')
+      // alert('Please enter the code to translate.')
       setSendingTranslation(false)
       return
     }
@@ -166,8 +198,8 @@ const TranslationOutputPage = () => {
       if (!response.ok) {
         // Directly display the backend-provided error message if the response is not OK
         console.error('Backend error:', data.error)
-        // toast.error(data.error || 'An error occurred. Please try again.')
-        alert(data.error || 'An error occurred. Please try again.')
+        toast.error(data.error || 'An error occurred. Please try again.')
+        // alert(data.error || 'An error occurred. Please try again.')
         setShowFeedback(false)
         const { data: translationData } = await createTranslationHistory({
           variables: {
@@ -193,7 +225,7 @@ const TranslationOutputPage = () => {
         })
       } else {
         if (data.success) {
-          setOutputCode(data.translatedCode)
+          setOutputCode(extractCode(data.translatedCode))
           // Proceed with creating translation history and other success logic...
           const { data: translationData } = await createTranslationHistory({
             variables: {
@@ -207,14 +239,14 @@ const TranslationOutputPage = () => {
               },
             },
           })
-          // toast.success('Translation saved successfully!')
-          alert('Translation saved successfully!')
+          toast.success('Translation saved successfully!')
+          // alert('Translation saved successfully!')
           setTranslationId(translationData.createTranslationHistory.id) // Update translation ID state
           setShowFeedback(true) // Show feedback form or confirmation
         } else {
           // Handle cases where the backend indicates failure through the 'success' flag
-          // toast.error(data.error || 'Translation failed. Please try again.')
-          alert(data.error || 'Translation failed. Please try again.')
+          toast.error(data.error || 'Translation failed. Please try again.')
+          // alert(data.error || 'Translation failed. Please try again.')
           setShowFeedback(false)
           const { data: translationData } = await createTranslationHistory({
             variables: {
@@ -242,8 +274,8 @@ const TranslationOutputPage = () => {
       }
     } catch (error) {
       console.error('Fetch error:', error)
-      alert('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
-      // toast.error('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
+      // alert('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
+      toast.error('Error sending translation request.') // This message shows for fetch errors, not backend logic errors
       setShowFeedback(false)
       const { data: translationData } = await createTranslationHistory({
         variables: {
@@ -273,25 +305,55 @@ const TranslationOutputPage = () => {
 
   return (
     <>
+      <Metadata title="Translator" description="Translator Page" />
       <Toaster />
       <MainLayout>
         <div className="min-h-screen p-10">
           <div className="mb-4">
-            <label
-              htmlFor="inputCode"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="inputCode" className="text-xl text-gray-700">
               Enter your code:
             </label>
             <textarea
               id="inputCode"
               rows="15"
               cols="30"
-              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="numbered form-textarea mt-1 block w-full rounded-md border-gray-300 font-mono shadow-sm"
               placeholder="Enter your code..."
               value={inputCode}
               onChange={(e) => setInputCode(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Tab') {
+                  e.preventDefault()
+                  const { selectionStart, selectionEnd, value } = e.target
+                  // Insert tab character into inputCode value at the cursor position
+                  setInputCode(
+                    value.substring(0, selectionStart) +
+                      '\t' +
+                      value.substring(selectionEnd)
+                  )
+                  // Move the cursor position forward by one tab space
+                  e.target.selectionStart = e.target.selectionEnd =
+                    selectionStart + 1
+                }
+              }}
             ></textarea>
+
+            {/* <Editor
+              id="inputCode"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="Enter your code..."
+              value={inputCode}
+              onChange={setInputCode}
+              theme="vs-light"
+              language={sourceLang}
+              height="300px"
+              options={{
+                minimap: {
+                  enabled: false, // Disable minimap if needed
+                },
+                scrollBeyondLastLine: false,
+              }}
+            /> */}
           </div>
 
           {/* Additional form fields and UI components as needed */}
@@ -299,85 +361,100 @@ const TranslationOutputPage = () => {
           <div className="mb-4">
             <label
               htmlFor="sourceLang"
-              className="block text-sm font-medium text-gray-700"
+              className="text-l block font-medium text-gray-700"
             >
               Language of your code:
-            </label>
-            <select
-              id="sourceLang"
-              className="border border-gray 300 focus:outline-none focus:ring-indigo-500 mt-1 block
-              w-full rounded-md px-3 py-2 shadow-sm focus:border-indigo-500 sm:text-sm"
-              value={sourceLang}
-              onChange={(e) => setSourceLang(e.target.value)}
-            >
-              <option value="java">java</option>
-              <option value="python">python</option>
-              <option value="javascript">javascript</option>
-              {/* Add more options as needed */}
-            </select>
-          </div>
+              <select
+                id="sourceLang"
+                className="border focus:outline-none focus:ring-indigo-500  mt-1 block w-64 rounded-md
+              border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 sm:text-sm"
+                value={sourceLang}
+                onChange={(e) => setSourceLang(e.target.value)}
+              >
+                {languageOptionsUpper.map((langOp) => (
+                  <option key={langOp} value={langOp.toLowerCase()}>
+                    {langOp}
+                  </option>
+                ))}
 
-          <div className="mb-4">
+                {/* Add more options as needed */}
+              </select>
+            </label>
             <label
               htmlFor="targetLang"
-              className="block text-sm font-medium text-gray-700"
+              className="text-l mt-4 block font-medium text-gray-700"
             >
-              Translation Language:
+              Translation language:
+              <select
+                id="targetLang"
+                className="border focus:outline-none focus:ring-indigo-500 mt-1 block w-64 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 sm:text-sm"
+                value={targetLang}
+                onChange={(e) => setTargetLang(e.target.value)}
+              >
+                {languageOptionsUpper.map((langOp) => (
+                  <option key={langOp} value={langOp.toLowerCase()}>
+                    {langOp}
+                  </option>
+                ))}
+                {/* Add more options as needed */}
+              </select>
             </label>
-            <select
-              id="targetLang"
-              className="border focus:outline-none focus:ring-indigo-500 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 sm:text-sm"
-              value={targetLang}
-              onChange={(e) => setTargetLang(e.target.value)}
-            >
-              <option value="java">java</option>
-              <option value="python">python</option>
-              <option value="javascript">javascript</option>
-              {/* Add more options as needed */}
-            </select>
           </div>
 
           <div className="flex justify-between">
             <button
               disabled={sendingTranslation}
               onClick={handleTranslateClick}
-              className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 inline-flex justify-center rounded-md border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-900 disabled:bg-indigo-900"
+              className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-l inline-flex justify-center rounded-md border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-900 disabled:bg-indigo-900"
             >
               Translate
             </button>
           </div>
 
           <div className="mt-4">
-            <label
-              htmlFor="outputCode"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="outputCode" className="text-xl text-gray-700">
               Translated Code:
             </label>
             <textarea
               id="outputCode"
               rows="15"
               cols="30"
-              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 font-mono shadow-sm"
               placeholder="Translated code will appear here..."
               value={outputCode}
               disabled
             ></textarea>
+            {/* <Editor
+              id="outputCode"
+              height="300px"
+              className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="Translated code will appear here..."
+              value={outputCode}
+              language={targetLang}
+              options={{
+                readOnly: true,
+                domReadOnly: true,
+                minimap: {
+                  enabled: false, // Disable minimap if needed
+                },
+                scrollBeyondLastLine: false,
+              }}
+            /> */}
             <div className="mt-4 flex">
               <button
                 onClick={copyToClipboard}
-                className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mr-2 inline-flex items-center justify-center rounded-md border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+                className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-l mr-2 inline-flex items-center justify-center rounded-md border-transparent bg-green-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-green-700"
               >
                 Copy
               </button>
               <button
                 onClick={downloadFile}
-                className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 inline-flex items-center justify-center rounded-md border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+                className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-l inline-flex items-center justify-center rounded-md border-transparent bg-blue-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-blue-700"
               >
                 Download
               </button>
               <Link to={routes.translationHistory()}>
-                <button className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ml-2 inline-flex items-center justify-center rounded-md border-transparent bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700">
+                <button className="border focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 text-l ml-2 inline-flex items-center justify-center rounded-md border-transparent bg-gray-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-gray-700">
                   Translation History
                 </button>
               </Link>

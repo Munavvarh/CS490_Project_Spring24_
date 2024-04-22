@@ -7,7 +7,7 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout'
 const ContactUsPage = () => {
   return (
     <>
-      <Metadata title="ContactUs" description="ContactUs page" />
+      <Metadata title="Contact Us" description="Contact Us page" />
 
       <Toaster />
       <MainLayout>
