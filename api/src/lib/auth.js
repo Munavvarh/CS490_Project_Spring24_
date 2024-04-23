@@ -117,3 +117,36 @@ export const requireAuth = ({ roles } = {}) => {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }
+
+
+export const login = async ({ username, password, twoFactorCode }) => {
+  // Step 1: Validate user credentials
+  const user = await db.user.findUnique({
+    where: { email: username },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+
+
+  // Step 2: Check if 2FA is enabled and handle accordingly
+  if (user.twoFactorEnabled) {
+    if (!twoFactorCode) {
+      // Generate and send a 2FA code
+      await generate2FACode(user.id);
+      throw new Error('2FA code sent to your email. Please verify to continue.');
+    } else {
+      // Verify the provided 2FA code
+      const isVerified = await verify2FACode(user.id, twoFactorCode);
+      if (!isVerified) {
+        throw new Error('Invalid 2FA code');
+      }
+    }
+  }
+
+  // Step 3: Complete the login process
+  // This is where you would typically set up session, token, etc.
+  return { success: true, user };
+};
