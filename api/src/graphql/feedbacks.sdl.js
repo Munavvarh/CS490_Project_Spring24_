@@ -3,8 +3,8 @@ export const schema = gql`
     id: Int!
     createdAt: DateTime!
     score: Int!
-    translation: TranslationHistory!
-    translationId: Int!
+    translation: TranslationHistory
+    translationId: Int
     review: String
     User: User!
     userId: Int!

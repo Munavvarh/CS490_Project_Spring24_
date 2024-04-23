@@ -41,6 +41,19 @@ const SignupPage = () => {
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
+      if (
+        response.error.includes(
+          'Unique constraint failed on the constraint: `User_email_key`'
+        )
+      ) {
+        response.error = 'That email is already connected to an account.'
+      } else if (
+        response.error.includes(
+          'Unique constraint failed on the constraint: `User_name_key`'
+        )
+      ) {
+        response.error = 'That username is already connected to an account.'
+      }
       toast.error(response.error)
     } else {
       // user is signed in automatically
@@ -54,7 +67,7 @@ const SignupPage = () => {
 
       <main className="rw-main mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
         <img
-          src="/logo.png"
+          src="/logo-bg.png"
           alt="Syntax Switch Logo"
           className="logo-image mr-2 h-8 w-8"
         />
@@ -149,7 +162,10 @@ const SignupPage = () => {
                         />
                       </div>
                       <div className="ml-3 text-sm">
-                        <label for="terms" className="text-grey-500 font-light">
+                        <label
+                          htmlFor="terms"
+                          className="text-grey-500 font-light"
+                        >
                           I accept the{' '}
                           <a
                             className="font-medium text-blue-500 hover:underline"
