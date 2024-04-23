@@ -106,6 +106,7 @@ const LoginPage = () => {
                             message: 'Username is required',
                           },
                         }}
+
                         disabled={twoFactorRequired}
                       />
                       <FieldError name="username" className="rw-field-error" />
@@ -129,38 +130,30 @@ const LoginPage = () => {
                             message: 'Password is required',
                           },
                         }}
-                        disabled={twoFactorRequired}
                       />
-                      <FieldError name="password" className="rw-field-error" />
 
-                      {twoFactorRequired && (
-                        <>
-                          <Label
-                            name="twoFactorCode"
-                            className="rw-label mb-2 block text-sm font-medium text-gray-900 "
-                            errorClassName="rw-label rw-label-error"
-                          >
-                            2FA Code
-                          </Label>
-                          <TextField
-                            name="twoFactorCode"
-                            className="rw-input bg-gray-50 border rounded focus:ring-primary-600 focus:border-primary-600 p-2.5 block w-full border-gray-300 text-gray-900 sm:text-sm"
-                            errorClassName="rw-input rw-input-error"
-                            placeholder="Enter your 2FA code"
-                            validation={{
-                              required: {
-                                value: true,
-                                message: '2FA Code is required',
-                              },
-                            }}
-                          />
-                          <FieldError name="twoFactorCode" className="rw-field-error" />
-                        </>
-                      )}
+                      {/* <div className="flex items-center justify-between">
+                      <div className="flex items-start">
+                        <div className="flex items-center h-5">
+                          <input id="remember" aria-describedby='remember' type="text" />
+                        </div>
+                      </div>
+                    </div> */}
+
+                      <div className="rw-forgot-link">
+                        <Link
+                          to={routes.forgotPassword()}
+                          className="rw-forgot-link text-primary-600 text-sm font-medium text-blue-500 hover:underline"
+                        >
+                          Forgot Password?
+                        </Link>
+                      </div>
+
+                      <FieldError name="password" className="rw-field-error" />
 
                       <div className="rw-button-group">
                         <Submit className="rw-button rw-button-blue hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 py-2.5 w-full rounded-sm bg-blue-500 px-5 text-center text-sm font-medium text-white">
-                          {twoFactorRequired ? 'Verify 2FA Code' : 'Login'}
+                          Login
                         </Submit>
                       </div>
                     </Form>

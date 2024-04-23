@@ -44,7 +44,7 @@ const ForgotPasswordPage = () => {
 
       <main className="rw-main mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
         <img
-          src="/logo.png"
+          src="/logo-bg.png"
           alt="Syntax Switch Logo"
           className="logo-image mr-2 h-8 w-8"
         />

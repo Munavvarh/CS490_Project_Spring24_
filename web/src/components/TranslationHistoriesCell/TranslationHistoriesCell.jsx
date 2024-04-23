@@ -221,7 +221,7 @@ export const Success = ({ translationHistories }) => {
             sortedTranslationHistories.map((history) => (
               <tr key={history.id}>
                 <td style={styles.tdCode}>
-                  {history.originalCode}
+                  <code>{history.originalCode}</code>
                   <button
                     onClick={() => copyToClipboardOriginal({ history })}
                     className={
@@ -235,7 +235,7 @@ export const Success = ({ translationHistories }) => {
                   </button>
                 </td>
                 <td style={styles.tdCode}>
-                  {history.translatedCode}
+                  <code>{history.translatedCode}</code>
                   <button
                     onClick={() => copyToClipboardTranslated({ history })}
                     className={

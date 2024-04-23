@@ -1,18 +1,21 @@
 // web/src/components/ProfileEditPage/ProfileEditPage.test.js
 
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { MockedProvider } from '@apollo/client/testing'
+
 import { MemoryRouter } from 'react-router-dom'
+
 import { navigate } from '@redwoodjs/router'
+import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing'
+import { MockProviders } from '@redwoodjs/testing/web'
+import { GraphQLHooksProvider } from '@redwoodjs/web'
+
+import { useAuth } from 'src/auth'
+
 import ProfileEditPage, {
   GET_USER_NAME,
   DELETE_USER,
   UPDATE_USER_PROFILE,
 } from './ProfileEditPage'
-import { GraphQLHooksProvider } from '@redwoodjs/web'
-
-import { useAuth } from 'src/auth'
 
 jest.mock('src/auth')
 
@@ -29,7 +32,7 @@ describe('ProfileEditPage', () => {
 
   it('renders the profile edit page', async () => {
     render(
-      <MockedProvider>
+      <MockProviders>
         <MemoryRouter>
           <GraphQLHooksProvider
             useMutation={jest.fn().mockReturnValue([jest.fn(), {}])}
@@ -39,7 +42,7 @@ describe('ProfileEditPage', () => {
             <ProfileEditPage />
           </GraphQLHooksProvider>
         </MemoryRouter>
-      </MockedProvider>
+      </MockProviders>
     )
 
     // Assert that the profile edit page renders without crashing
@@ -78,7 +81,7 @@ describe('ProfileEditPage', () => {
     ]
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockProviders mocks={mocks} addTypename={false}>
         <MemoryRouter>
           <GraphQLHooksProvider
             useMutation={jest.fn().mockReturnValue([jest.fn(), {}])}
@@ -88,17 +91,17 @@ describe('ProfileEditPage', () => {
             <ProfileEditPage />
           </GraphQLHooksProvider>
         </MemoryRouter>
-      </MockedProvider>
+      </MockProviders>
     )
 
     await waitFor(() =>
-      expect(screen.getByLabelText('username')).toBeInTheDocument()
+      expect(screen.getByLabelText('Username')).toBeInTheDocument()
     )
 
-    fireEvent.change(screen.getByLabelText('username'), {
+    fireEvent.change(screen.getByLabelText('Username'), {
       target: { value: updatedName },
     })
-    fireEvent.change(screen.getByLabelText('email'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: updatedEmail },
     })
 

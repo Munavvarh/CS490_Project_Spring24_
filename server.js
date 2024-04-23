@@ -1,4 +1,3 @@
-const path = require('path');
 const detectLang = require('lang-detector');
 const express = require('express');
 const cors = require('cors');
@@ -8,6 +7,8 @@ const OpenAI = require('openai');
 require('dotenv').config();
 
 const app = express();
+
+const supportedLanguages = ['python', 'java', 'javascript', 'c++', 'go', 'ruby'];
 
 app.use(cors());
 app.use(express.json());
@@ -22,10 +23,6 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'web', 'dist')));
-
 
 // Mock function to simulate a successful API request
 const mockSuccessRequest = async () => {
@@ -52,9 +49,18 @@ function preprocessCode(inputCode, sourceLang) {
 function removeComments(code, language) {
   switch (language.toLowerCase()) {
     case 'python':
-      code = code.replace(/#.*$/gm, '');
-      break;
+      code = code.replace(/#.*$/gm, '')
+      break
+    case 'go':
+      // Remove Go comments starting with '//'
+      code = code.replace(/\/\/.*/g, '')
+      break
+    case 'ruby':
+      // Remove Ruby comments starting with '#' (excluding #-begin and #-end)
+      code = code.replace(/(?<!#-)(#.*$)/gm, '')
+      break
     case 'java':
+    case 'c++':
     case 'javascript':
       code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
       break;
@@ -72,7 +78,7 @@ app.post('/translate-code', async (req, res) => {
     return res.status(400).json({ success: false, error: "Missing required fields." });
   }
 
-  if (!['python', 'java', 'javascript'].includes(sourceLang.toLowerCase()) || !['python', 'java', 'javascript'].includes(targetLang.toLowerCase())) {
+  if (!supportedLanguages.includes(sourceLang.toLowerCase()) || !supportedLanguages.includes(targetLang.toLowerCase())) {
     return res.status(400).json({ success: false, error: "Unsupported source or target language." });
   }
 
@@ -86,7 +92,7 @@ app.post('/translate-code', async (req, res) => {
   }
 
   const detectedLanguage = detectLang(inputCode).toLowerCase();
-  if (!['python', 'java', 'javascript'].includes(detectedLanguage)) {
+  if (!supportedLanguages.includes(detectedLanguage)) {
     return res.status(400).json({ success: false, error: "Unsupported source language detected. Please choose between Python, Java, and JavaScript." });
   }
 
@@ -124,13 +130,7 @@ app.post('/translate-code', async (req, res) => {
   }
 });
 
-// Catch-all route to serve index.html for all routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'web', 'dist', 'index.html'));
-});
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = { app, preprocessCode, mockSuccessRequest, mockFailedRequest };
-
