@@ -6,7 +6,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://test:1234@localhost:3306/test"
+  url      = env("JAWSDB_URL")
 }
 
 generator client {

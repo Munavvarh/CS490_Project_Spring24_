@@ -62,10 +62,10 @@ function removeComments(code, language) {
     case 'java':
     case 'c++':
     case 'javascript':
-      code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '')
-      break
+      code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+      break;
   }
-  return code
+  return code;
 }
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, dangerouslyAllowBrowser: true });
