@@ -308,6 +308,15 @@ const TranslationOutputPage = () => {
       <Metadata title="Translator" description="Translator Page" />
       <Toaster />
       <MainLayout>
+        <main className="ml-8 mr-8 mt-8">
+          <div className="home-section-title">Translator Tool</div>
+          <div className="text-xl">
+            Translate your code below. Simply type or paste text into the the
+            box below, choose your source and target languages, and hit
+            translate! For more details about using this tool, please refer to
+            the Documentation page linked in the navigation bar.
+          </div>
+        </main>
         <div className="min-h-screen p-10">
           <div className="mb-4">
             <label htmlFor="inputCode" className="text-xl text-gray-700">
@@ -369,7 +378,7 @@ const TranslationOutputPage = () => {
                 className="border focus:outline-none focus:ring-indigo-500  mt-1 block w-64 rounded-md
               border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 sm:text-sm"
                 value={sourceLang}
-                onChange={(e) => setSourceLang(e.target.value)}
+                onChange={(e) => setSourceLang(e.target.value.toLowerCase())}
               >
                 {languageOptionsUpper.map((langOp) => (
                   <option key={langOp} value={langOp.toLowerCase()}>

@@ -21,7 +21,9 @@ describe('UserFeedbackListCell', () => {
   it('renders Empty successfully', async () => {
     render(<Empty />)
     expect(
-      'No user feedbacks yet! Make a translation and you can be the first!'
+      screen.getByText(
+        'No user feedbacks yet! Make a translation and you can be the first!'
+      )
     ).toBeInTheDocument()
   })
 
