@@ -8,11 +8,11 @@ require('dotenv').config()
 
 const app = express()
 
+const supportedLanguages = ['python', 'java', 'javascript', 'c++', 'go', 'ruby']
+
 app.use(cors())
 app.use(express.json())
 app.use(helmet())
-
-const languageOptions = ['python', 'java', 'javascript', 'c++', 'ruby', 'go']
 
 // Rate limiting to prevent abuse
 const limiter = rateLimit({
@@ -50,13 +50,19 @@ function preprocessCode(inputCode, sourceLang) {
 
 function removeComments(code, language) {
   switch (language.toLowerCase()) {
-    case 'ruby':
     case 'python':
       code = code.replace(/#.*$/gm, '')
       break
+    case 'go':
+      // Remove Go comments starting with '//'
+      code = code.replace(/\/\/.*/g, '')
+      break
+    case 'ruby':
+      // Remove Ruby comments starting with '#' (excluding #-begin and #-end)
+      code = code.replace(/(?<!#-)(#.*$)/gm, '')
+      break
     case 'java':
     case 'c++':
-    case 'go':
     case 'javascript':
       code = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '')
       break
@@ -80,8 +86,8 @@ app.post('/translate-code', async (req, res) => {
   }
 
   if (
-    !languageOptions.includes(sourceLang.toLowerCase()) ||
-    !languageOptions.includes(targetLang.toLowerCase())
+    !supportedLanguages.includes(sourceLang.toLowerCase()) ||
+    !supportedLanguages.includes(targetLang.toLowerCase())
   ) {
     return res
       .status(400)
@@ -99,7 +105,7 @@ app.post('/translate-code', async (req, res) => {
   }
 
   const detectedLanguage = detectLang(inputCode).toLowerCase()
-  if (!languageOptions.includes(detectedLanguage)) {
+  if (!supportedLanguages.includes(detectedLanguage)) {
     return res.status(400).json({
       success: false,
       error:

@@ -19,9 +19,10 @@ describe('UserFeedbackListCell', () => {
   })
 
   it('renders Empty successfully', async () => {
-    expect(() => {
-      render(<Empty />)
-    }).not.toThrow()
+    render(<Empty />)
+    expect(
+      'No user feedbacks yet! Make a translation and you can be the first!'
+    ).toBeInTheDocument()
   })
 
   it('renders Failure successfully', async () => {
