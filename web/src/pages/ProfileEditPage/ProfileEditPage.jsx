@@ -86,8 +86,7 @@ const ProfileEditPage = () => {
     }
   }
 
-  const handleUpdateUser = async () => {
-    /* var updateMessage = ''
+  /* var updateMessage = ''
     if (emailInUse || nameInUse) {
       if (emailInUse && nameInUse) {
         updateMessage = 'Email and Username are already in use.'
@@ -100,6 +99,8 @@ const ProfileEditPage = () => {
       toast.error(updateMessage)
       return
     } */
+
+  const handleUpdateUser = async () => {
     try {
       await updateUserProfile({
         variables: {
@@ -112,7 +113,6 @@ const ProfileEditPage = () => {
       })
       navigate('/home')
     } catch (error) {
-      toast.error('There was a problem.  Name or email may already be in use.')
       console.error('Error updating user:', error)
     }
   }
