@@ -83,13 +83,18 @@ export const Success = ({ feedbacks, minimal, length = feedbacks.length }) => {
         .includes(searchTerm.toLowerCase())
   )
 
+  if (feedbacks.length < 5) {
+    var start = 0
+  } else {
+    start = feedbacks.length - 5
+  }
   return (
     <div className="space-y-4">
       {minimal ? (
         feedbacks &&
         feedbacks
+          .slice(start, feedbacks.length)
           .reverse()
-          .slice(0, 5)
           .map((feedback) => (
             <UserFeedback
               minimal={minimal}
