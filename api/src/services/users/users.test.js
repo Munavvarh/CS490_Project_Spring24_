@@ -1,4 +1,12 @@
-import { users, user, createUser, updateUser, deleteUser } from './users'
+import {
+  users,
+  user,
+  createUser,
+  updateUser,
+  deleteUser,
+  userByEmail,
+  userByName,
+} from './users'
 
 // Generated boilerplate tests do not account for all circumstances
 // and can fail without adjustments, e.g. Float.
@@ -17,6 +25,18 @@ describe('users', () => {
     const result = await user({ id: scenario.user.one.id })
 
     expect(result).toEqual(scenario.user.one)
+  })
+
+  scenario('returns a single user via email', async (scenario) => {
+    const result = await userByEmail({ email: scenario.user.one.email })
+
+    expect(result).toEqual(true)
+  })
+
+  scenario('returns a single user via name', async (scenario) => {
+    const result = await userByName({ name: scenario.user.one.name })
+
+    expect(result).toEqual(true)
   })
 
   scenario('creates a user', async () => {

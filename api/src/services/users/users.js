@@ -10,6 +10,22 @@ export const user = ({ id }) => {
   })
 }
 
+export const userByEmail = ({ email }) => {
+  return db.user.findUnique({
+    where: { email },
+  })
+    ? true
+    : false
+}
+
+export const userByName = ({ name }) => {
+  return db.user.findUnique({
+    where: { name },
+  })
+    ? true
+    : false
+}
+
 export const createUser = ({ input }) => {
   return db.user.create({
     data: input,

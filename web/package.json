@@ -12,17 +12,17 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
-    "@redwoodjs/auth-dbauth-web": "7.4.2",
-    "@redwoodjs/forms": "7.4.2",
-    "@redwoodjs/router": "7.4.2",
-    "@redwoodjs/web": "7.4.2",
+    "@redwoodjs/auth-dbauth-web": "7.4.3",
+    "@redwoodjs/forms": "7.4.3",
+    "@redwoodjs/router": "7.4.3",
+    "@redwoodjs/web": "7.4.3",
     "humanize-string": "2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^5.0.0",
-    "@redwoodjs/vite": "7.4.2",
+    "@redwoodjs/vite": "7.4.3",
     "@testing-library/user-event": "^14.5.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
