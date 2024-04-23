@@ -28,6 +28,9 @@ model User {
   translationHistories TranslationHistory[]
   Feedback             Feedback[]
   Contact              Contact[]
+  twoFactorToken       String?
+  tokenCreatedAt       DateTime?
+  twoFactorEnabled     Boolean              @default(false)
 }
 
 model Feedback {
@@ -75,4 +78,13 @@ model Contact {
   message      String
   wantResponse Boolean
   sentResponse Boolean?
+}
+
+model SMTPSettings {
+  id     Int    @id @default(autoincrement())
+  host   String
+  port   Int
+  user   String
+  pass   String
+  secure Boolean
 }

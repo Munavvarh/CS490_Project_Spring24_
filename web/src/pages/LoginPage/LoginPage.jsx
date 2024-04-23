@@ -1,6 +1,5 @@
-import { useRef } from 'react'
-import { useEffect } from 'react'
-
+import { useRef, useState, useEffect } from 'react'
+import MainLayout from 'src/layouts/MainLayout/MainLayout'
 import {
   Form,
   Label,
@@ -12,12 +11,12 @@ import {
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-
 import { useAuth } from 'src/auth'
-import MainLayout from 'src/layouts/MainLayout/MainLayout'
 
 const LoginPage = () => {
   const { isAuthenticated, logIn } = useAuth()
+  const [twoFactorRequired, setTwoFactorRequired] = useState(false)
+  const [loginData, setLoginData] = useState({})
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -31,17 +30,35 @@ const LoginPage = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    const response = await logIn({
-      username: data.username,
-      password: data.password,
-    })
+    if (!twoFactorRequired) {
+      const response = await logIn({
+        username: data.username,
+        password: data.password,
+      })
 
-    if (response.message) {
-      toast(response.message)
-    } else if (response.error) {
-      toast.error(response.error)
+      if (response.message && response.message.includes('2FA code sent')) {
+        toast(response.message)
+        setTwoFactorRequired(true)
+        setLoginData(data)  // Save login data for the second attempt
+      } else if (response.error) {
+        toast.error(response.error)
+      } else {
+        toast.success('Welcome back!')
+        navigate(routes.home())
+      }
     } else {
-      toast.success('Welcome back!')
+      // This is the second submission for the 2FA code
+      const response = await logIn({
+        ...loginData,
+        twoFactorCode: data.twoFactorCode,
+      })
+
+      if (response.error) {
+        toast.error(response.error)
+      } else {
+        toast.success('2FA verification successful, welcome back!')
+        navigate(routes.home())
+      }
     }
   }
 
@@ -49,12 +66,11 @@ const LoginPage = () => {
     <>
       <MainLayout>
         <Metadata title="Login" />
-
         <main className="rw-main mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
           <img
-            src="/logo-bg.png"
+            src="/logo.png"
             alt="Syntax Switch Logo"
-            className="logo-image"
+            className="logo-image mr-2 h-8 w-8"
           />
           <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
           <div className="rw-scaffold rw-login-container shadow dark:border w-full rounded-lg bg-white sm:max-w-md md:mt-0 xl:p-0">
@@ -65,7 +81,6 @@ const LoginPage = () => {
                     Sign in to your account!
                   </h2>
                 </header>
-
                 <div className="rw-segment-main">
                   <div className="rw-form-wrapper">
                     <Form
@@ -91,8 +106,9 @@ const LoginPage = () => {
                             message: 'Username is required',
                           },
                         }}
-                      />
 
+                        disabled={twoFactorRequired}
+                      />
                       <FieldError name="username" className="rw-field-error" />
 
                       <Label

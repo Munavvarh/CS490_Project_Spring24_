@@ -64,3 +64,30 @@ export default async () => {
     console.error(error)
   }
 }
+
+// prisma/seed.js
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+async function main() {
+  const smtp = await prisma.sMTPSettings.create({
+    data: {
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT, 10),
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+      secure: process.env.SMTP_SECURE === 'true' // Assuming environment variable is 'true' or 'false'
+    }
+  });
+  console.log('SMTP settings inserted:', smtp);
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
